@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Birthday Blessing</title>
+<meta name="description" content="Send a personalized Christian birthday blessing to someone special.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════════
+   TOKENS
+════════════════════════════════════════════ */
+:root {
+  --gold:       #C8961E;
+  --gold-lt:    #E8BE5A;
+  --gold-dk:    #7A5A10;
+  --gold-glow:  rgba(200,150,30,0.35);
+  --cream:      #FAF5EB;
+  --parch:      #F0E6CC;
+  --ink:        #1E1408;
+  --ink2:       #4A3820;
+  --rose:       #9B3A54;
+  --sage:       #3D6B52;
+  --sky:        #2D5F84;
+  --bg:         var(--cream);
+  --glass:      rgba(255,255,255,0.88);
+  --border:     rgba(200,150,30,0.22);
+  --shadow:     rgba(30,20,8,0.13);
+  --txt:        var(--ink);
+  --txt2:       var(--ink2);
+  --inp-bg:     rgba(255,251,240,0.95);
+}
+[data-theme="dark"] {
+  --bg:         #120D04;
+  --glass:      rgba(22,15,4,0.94);
+  --border:     rgba(200,150,30,0.28);
+  --shadow:     rgba(0,0,0,0.5);
+  --txt:        #F0E6CC;
+  --txt2:       #BFA06A;
+  --inp-bg:     rgba(30,20,8,0.9);
+  --cream:      #120D04;
+  --parch:      #1E1408;
+}
+
+/* ════════════════════════════════════════════
+   RESET & BASE
+════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  min-height: 100vh;
+  transition: background .4s, color .4s;
+  overflow-x: hidden;
+}
+
+/* ════════════════════════════════════════════
+   CANVAS LAYERS
+════════════════════════════════════════════ */
+#bg-canvas   { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.5; }
+#conf-canvas { position:fixed; inset:0; z-index:200; pointer-events:none; }
+
+/* ════════════════════════════════════════════
+   THEME TOGGLE
+════════════════════════════════════════════ */
+.theme-btn {
+  position: fixed; top:1rem; right:1rem; z-index:300;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: .4rem .9rem;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: .8rem;
+  letter-spacing:.06em;
+  color: var(--gold);
+  box-shadow: 0 2px 14px var(--shadow);
+  transition: all .3s;
+  display:flex; align-items:center; gap:.4rem;
+}
+.theme-btn:hover { transform:translateY(-1px); box-shadow:0 5px 20px var(--shadow); }
+
+/* ════════════════════════════════════════════
+   FLOATING ELEMENTS (balloons / stars)
+════════════════════════════════════════════ */
+.floats { position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.float {
+  position:absolute; bottom:-80px;
+  font-size:1.8rem;
+  animation: floatRise linear infinite;
+  opacity:0;
+}
+@keyframes floatRise {
+  0%   { transform:translateX(0) rotate(-8deg);  opacity:0; }
+  8%   { opacity:.6; }
+  50%  { transform:translateX(18px) rotate(6deg); }
+  92%  { opacity:.6; }
+  100% { transform:translateX(-12px) rotate(-4deg) translateY(-105vh); opacity:0; }
+}
+
+/* ════════════════════════════════════════════
+   PAGE WRAPPER
+════════════════════════════════════════════ */
+.page {
+  position:relative; z-index:10;
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center;
+  padding: 2rem 1rem 5rem;
+}
+
+/* ════════════════════════════════════════════
+   SECTION VISIBILITY
+════════════════════════════════════════════ */
+.view { display:none; width:100%; max-width:700px; flex-direction:column; align-items:center; }
+.view.active { display:flex; }
+
+/* ════════════════════════════════════════════
+   SHARED CARD
+════════════════════════════════════════════ */
+.card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 2.8rem 2.4rem;
+  width:100%;
+  box-shadow: 0 10px 50px var(--shadow), 0 1px 0 rgba(255,255,255,.5) inset;
+  backdrop-filter: blur(16px);
+  position:relative; overflow:hidden;
+}
+.card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--rose), var(--gold), var(--gold-lt), var(--gold), var(--sage));
+}
+
+/* ════════════════════════════════════════════
+   SITE HEADER (creator view)
+════════════════════════════════════════════ */
+.site-header {
+  text-align:center;
+  margin-bottom:2.2rem;
+  animation: fadeDown .8s ease both;
+}
+.cross { font-size:2.4rem; color:var(--gold); display:block; margin-bottom:.4rem; animation:glowPulse 3s ease-in-out infinite; }
+@keyframes glowPulse {
+  0%,100%{ text-shadow:0 0 8px rgba(200,150,30,.3); }
+  50%    { text-shadow:0 0 28px rgba(200,150,30,.8), 0 0 50px rgba(200,150,30,.3); }
+}
+.site-title {
+  font-family:'Cinzel Decorative', serif;
+  font-size:clamp(1.6rem,4.5vw,2.8rem);
+  font-weight:700;
+  letter-spacing:.04em;
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold),var(--gold-lt),var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  line-height:1.2;
+}
+.site-sub {
+  font-family:'Libre Baskerville', serif;
+  font-style:italic;
+  font-size:1rem;
+  color:var(--txt2);
+  margin-top:.4rem;
+  opacity:.8;
+}
+.divider {
+  display:flex; align-items:center; justify-content:center;
+  gap:.8rem; color:var(--gold); opacity:.6; margin:.8rem 0 0;
+}
+.divider::before,.divider::after {
+  content:''; flex:1; max-width:100px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+/* ════════════════════════════════════════════
+   CREATOR FORM
+════════════════════════════════════════════ */
+.form-label {
+  font-family:'Cinzel',serif;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold-dk); margin-bottom:.5rem; display:block;
+}
+[data-theme="dark"] .form-label { color:var(--gold-lt); }
+
+.input-row { display:flex; gap:.7rem; margin-bottom:1.4rem; }
+.name-input {
+  flex:1;
+  background:var(--inp-bg);
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:.85rem 1.1rem;
+  font-family:'Libre Baskerville',serif;
+  font-size:1.05rem;
+  color:var(--txt);
+  outline:none;
+  transition:border-color .3s, box-shadow .3s;
+}
+.name-input::placeholder { color:var(--txt2); opacity:.5; }
+.name-input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,150,30,.15); }
+
+.primary-btn {
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold));
+  color:#fff;
+  border:none; border-radius:14px;
+  padding:.85rem 1.4rem;
+  font-family:'Cinzel',serif;
+  font-size:.82rem; letter-spacing:.08em;
+  cursor:pointer;
+  transition:all .3s;
+  white-space:nowrap;
+  box-shadow:0 4px 18px rgba(122,90,16,.4);
+}
+.primary-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(122,90,16,.5); background:linear-gradient(135deg,var(--gold),var(--gold-lt)); }
+.primary-btn:active { transform:translateY(0); }
+
+/* Generated link box */
+.link-box {
+  display:none;
+  background:var(--inp-bg);
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:1rem 1.2rem;
+  margin:1rem 0 1.4rem;
+  font-family:'Lato',sans-serif;
+  font-size:.88rem;
+  color:var(--gold-dk);
+  word-break:break-all;
+  animation:fadeUp .5s ease both;
+}
+[data-theme="dark"] .link-box { color:var(--gold-lt); }
+
+.action-row {
+  display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center;
+  margin-top:.4rem;
+}
+.outline-btn {
+  display:flex; align-items:center; gap:.4rem;
+  background:transparent;
+  border:1.5px solid var(--border);
+  border-radius:50px;
+  padding:.55rem 1.1rem;
+  font-family:'Lato',sans-serif;
+  font-size:.88rem;
+  color:var(--txt2);
+  cursor:pointer;
+  transition:all .3s;
+}
+.outline-btn:hover { border-color:var(--gold); color:var(--gold-dk); background:rgba(200,150,30,.07); transform:translateY(-1px); }
+[data-theme="dark"] .outline-btn:hover { color:var(--gold-lt); }
+.outline-btn svg { width:14px; height:14px; flex-shrink:0; }
+
+/* ════════════════════════════════════════════
+   RECIPIENT VIEW – celebration header
+════════════════════════════════════════════ */
+.cel-header {
+  text-align:center;
+  margin-bottom:2rem;
+  animation:fadeDown .9s ease both;
+}
+.cel-cake { font-size:3.5rem; display:block; animation:bounceSoft 2s ease-in-out infinite; }
+@keyframes bounceSoft {
+  0%,100%{ transform:translateY(0) rotate(-3deg); }
+  50%    { transform:translateY(-10px) rotate(3deg); }
+}
+.cel-title {
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.4rem,4vw,2.4rem);
+  font-weight:700;
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold),var(--gold-lt));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  letter-spacing:.04em; line-height:1.2; margin-bottom:.3rem;
+}
+.cel-from {
+  font-family:'Libre Baskerville',serif;
+  font-style:italic;
+  font-size:1rem;
+  color:var(--txt2);
+  opacity:.8;
+}
+
+/* ════════════════════════════════════════════
+   GIFT BUTTON
+════════════════════════════════════════════ */
+.gift-wrap {
+  display:flex; flex-direction:column; align-items:center;
+  gap:1rem;
+  margin:1.5rem 0;
+  animation:fadeUp .9s .3s ease both;
+}
+.gift-btn {
+  background:linear-gradient(135deg, #9B3A54, #C8961E, #E8BE5A, #C8961E, #3D6B52);
+  background-size:300% 300%;
+  animation:gradShift 4s ease infinite;
+  color:#fff;
+  border:none;
+  border-radius:20px;
+  padding:1.4rem 2.8rem;
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1rem,2.5vw,1.3rem);
+  font-weight:700;
+  letter-spacing:.04em;
+  cursor:pointer;
+  box-shadow:0 8px 40px rgba(200,150,30,.5), 0 2px 0 rgba(255,255,255,.15) inset;
+  transition:transform .3s, box-shadow .3s;
+  position:relative; overflow:hidden;
+}
+.gift-btn::before {
+  content:'';
+  position:absolute; inset:-2px;
+  background:linear-gradient(135deg,var(--gold-lt),transparent,var(--gold-lt));
+  opacity:0;
+  transition:opacity .4s;
+  border-radius:inherit;
+}
+.gift-btn:hover { transform:translateY(-4px) scale(1.03); box-shadow:0 16px 50px rgba(200,150,30,.65); }
+.gift-btn:hover::before { opacity:.15; }
+.gift-btn:active { transform:translateY(0) scale(.98); }
+@keyframes gradShift {
+  0%  { background-position:0% 50%; }
+  50% { background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+.gift-hint {
+  font-family:'Libre Baskerville',serif;
+  font-style:italic;
+  font-size:.9rem;
+  color:var(--txt2);
+  opacity:.7;
+  animation:pulse 2.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:.5;} 50%{opacity:1;} }
+
+/* ════════════════════════════════════════════
+   BLESSING REVEAL
+════════════════════════════════════════════ */
+#blessing-reveal { display:none; }
+#blessing-reveal.shown { display:block; animation:revealUp .8s ease both; }
+@keyframes revealUp {
+  from{ opacity:0; transform:translateY(30px) scale(.97); }
+  to  { opacity:1; transform:translateY(0) scale(1); }
+}
+
+.bday-headline {
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(1.3rem,3.5vw,2rem);
+  font-weight:700;
+  text-align:center;
+  background:linear-gradient(135deg,var(--gold-dk),var(--gold),var(--gold-lt));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom:.3rem; line-height:1.3;
+}
+
+.blessing-divider {
+  display:flex; align-items:center; gap:.8rem;
+  color:var(--gold); margin:1rem 0;
+}
+.blessing-divider::before,.blessing-divider::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+.blessing-body {
+  font-family:'Libre Baskerville',serif;
+  font-size:1.05rem;
+  line-height:1.95;
+  font-style:italic;
+  text-align:center;
+  color:var(--txt);
+  margin:1rem 0 1.6rem;
+  font-weight:400;
+}
+
+.verse-block {
+  background:linear-gradient(135deg,rgba(200,150,30,.08),rgba(200,150,30,.03));
+  border:1px solid rgba(200,150,30,.28);
+  border-radius:18px;
+  padding:1.4rem 1.6rem;
+  margin:0 0 1.6rem;
+  position:relative;
+}
+.verse-block::before {
+  content:'\201C';
+  position:absolute; top:-8px; left:14px;
+  font-family:'Libre Baskerville',serif;
+  font-size:5rem; line-height:1;
+  color:var(--gold); opacity:.25;
+}
+.verse-text {
+  font-family:'Libre Baskerville',serif;
+  font-size:1rem; font-style:italic; line-height:1.85;
+  color:var(--txt); padding-left:.4rem;
+}
+.verse-ref {
+  display:block; text-align:right;
+  font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.1em;
+  color:var(--gold-dk); margin-top:.7rem;
+}
+[data-theme="dark"] .verse-ref { color:var(--gold-lt); }
+
+/* ════════════════════════════════════════════
+   SCENIC DECORATION – candles row
+════════════════════════════════════════════ */
+.candle-row {
+  display:flex; justify-content:center; gap:1.2rem;
+  margin:1.2rem 0;
+  font-size:1.8rem;
+  animation:fadeUp .7s .5s ease both;
+  opacity:0;
+  animation-fill-mode:both;
+}
+
+/* ════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════ */
+.toast {
+  position:fixed; bottom:2rem; left:50%;
+  transform:translateX(-50%) translateY(3rem);
+  background:var(--ink); color:var(--cream);
+  padding:.65rem 1.5rem; border-radius:50px;
+  font-size:.95rem; z-index:500; white-space:nowrap;
+  box-shadow:0 4px 24px rgba(0,0,0,.3);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  font-family:'Lato',sans-serif;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════ */
+.footer {
+  margin-top:3rem;
+  font-family:'Libre Baskerville',serif;
+  font-style:italic;
+  font-size:.85rem;
+  color:var(--txt2);
+  opacity:.55;
+  text-align:center;
+  animation:fadeUp 1s .6s ease both;
+}
+
+/* ════════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════════ */
+@keyframes fadeDown { from{opacity:0;transform:translateY(-22px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(22px);}  to{opacity:1;transform:translateY(0);} }
+
+/* ════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+@media(max-width:520px){
+  .card { padding:1.8rem 1.2rem; }
+  .input-row { flex-direction:column; }
+  .gift-btn { padding:1.2rem 1.8rem; }
+  .action-row { gap:.45rem; }
+  .outline-btn { font-size:.82rem; padding:.5rem .9rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<canvas id="conf-canvas"></canvas>
+<div class="floats" id="floats-layer"></div>
+
+<button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+  <span id="t-icon">🌙</span><span id="t-lbl">Dark</span>
+</button>
+
+<div class="page">
+
+  <!-- ══ CREATOR VIEW ══════════════════════════════════════ -->
+  <section class="view active" id="view-creator">
+    <header class="site-header">
+      <span class="cross">✝</span>
+      <h1 class="site-title">Birthday Blessing</h1>
+      <p class="site-sub">Send a sacred, personal gift of grace</p>
+      <div class="divider">✦ ✦ ✦</div>
+    </header>
+
+    <div class="card" style="animation:fadeUp .8s .1s ease both;opacity:0;animation-fill-mode:both;">
+      <label class="form-label" for="creator-name">Birthday person's name</label>
+      <div class="input-row">
+        <input class="name-input" id="creator-name" type="text"
+               placeholder="e.g. Sarah, beloved of God…" maxlength="60" autocomplete="off">
+        <button class="primary-btn" onclick="createLink()">✨ Create Link</button>
+      </div>
+
+      <div class="link-box" id="link-box"></div>
+
+      <div class="action-row" id="link-actions" style="display:none;">
+        <button class="outline-btn" onclick="copyLink()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy Link
+        </button>
+        <button class="outline-btn" onclick="shareLink()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share
+        </button>
+        <button class="outline-btn" onclick="previewLink()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Preview
+        </button>
+      </div>
+
+      <div style="margin-top:1.6rem; padding-top:1.4rem; border-top:1px solid var(--border);">
+        <p style="font-family:'Libre Baskerville',serif;font-size:.9rem;font-style:italic;color:var(--txt2);text-align:center;opacity:.7;line-height:1.7;">
+          Share the link with your loved one. When they open it, they'll see a beautiful surprise waiting to be revealed. 🎁
+        </p>
+      </div>
+    </div>
+
+    <footer class="footer">"The Lord bless you and keep you." — Numbers 6:24</footer>
+  </section>
+
+  <!-- ══ RECIPIENT VIEW ══════════════════════════════════════ -->
+  <section class="view" id="view-recipient">
+    <header class="cel-header">
+      <span class="cel-cake">🎂</span>
+      <h1 class="cel-title" id="cel-title">Happy Birthday!</h1>
+      <p class="cel-from">A special blessing has been prepared for you</p>
+    </header>
+
+    <div class="card" style="animation:fadeUp .9s .2s ease both;opacity:0;animation-fill-mode:both;">
+      <!-- Candle decoration -->
+      <div class="candle-row">🕯️🎈🎉🎊🎈🕯️</div>
+
+      <!-- Gift button -->
+      <div class="gift-wrap" id="gift-wrap">
+        <button class="gift-btn" onclick="openBlessing()" id="gift-btn">
+          🎁 Open Your Birthday Blessing
+        </button>
+        <p class="gift-hint">Tap to receive your special message…</p>
+      </div>
+
+      <!-- Hidden blessing reveal -->
+      <div id="blessing-reveal">
+        <div class="blessing-divider">🌟</div>
+        <h2 class="bday-headline" id="bday-headline"></h2>
+        <p class="blessing-body" id="blessing-body"></p>
+
+        <div class="verse-block">
+          <p class="verse-text" id="verse-text"></p>
+          <span class="verse-ref" id="verse-ref"></span>
+        </div>
+
+        <div class="action-row">
+          <button class="outline-btn" onclick="copyBlessing()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2v1"/></svg>
+            Copy Blessing
+          </button>
+          <button class="outline-btn" onclick="shareBlessing()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share
+          </button>
+          <button class="outline-btn" onclick="downloadCard()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Card
+          </button>
+        </div>
+
+        <!-- Create your own link -->
+        <div style="margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--border);text-align:center;">
+          <p style="font-family:'Libre Baskerville',serif;font-size:.88rem;font-style:italic;color:var(--txt2);opacity:.7;margin-bottom:.8rem;">Want to send a blessing to someone you love?</p>
+          <button class="outline-btn" onclick="goCreate()" style="margin:0 auto;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Create Your Own Blessing Link
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">"I have loved you with an everlasting love." — Jeremiah 31:3</footer>
+  </section>
+
+</div><!-- .page -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════ */
+const verses = [
+  {t:"For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.",r:"Jeremiah 29:11"},
+  {t:"The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you; the Lord turn his face toward you and give you peace.",r:"Numbers 6:24-26"},
+  {t:"This is the day the Lord has made; let us rejoice and be glad in it.",r:"Psalm 118:24"},
+  {t:"I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.",r:"Psalm 139:14"},
+  {t:"For you created my inmost being; you knit me together in my mother's womb.",r:"Psalm 139:13"},
+  {t:"Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",r:"Proverbs 3:5-6"},
+  {t:"May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.",r:"Romans 15:13"},
+  {t:"I can do all this through him who gives me strength.",r:"Philippians 4:13"},
+  {t:"Delight yourself in the Lord, and he will give you the desires of your heart.",r:"Psalm 37:4"},
+  {t:"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",r:"Joshua 1:9"},
+  {t:"And we know that in all things God works for the good of those who love him, who have been called according to his purpose.",r:"Romans 8:28"},
+  {t:"The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you; in his love he will rejoice over you with singing.",r:"Zephaniah 3:17"},
+  {t:"Give thanks to the Lord, for he is good; his love endures forever.",r:"Psalm 107:1"},
+  {t:"For the Lord God is a sun and shield; the Lord bestows favor and honor; no good thing does he withhold from those whose walk is blameless.",r:"Psalm 84:11"},
+  {t:"How precious to me are your thoughts, God! How vast is the sum of them!",r:"Psalm 139:17"},
+  {t:"Surely goodness and love will follow me all the days of my life, and I will dwell in the house of the Lord forever.",r:"Psalm 23:6"},
+  {t:"I have come that they may have life, and have it to the full.",r:"John 10:10"},
+  {t:"Those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",r:"Isaiah 40:31"},
+  {t:"The Lord takes delight in his people; he crowns the humble with victory.",r:"Psalm 149:4"},
+  {t:"He who began a good work in you will carry it on to completion until the day of Christ Jesus.",r:"Philippians 1:6"},
+  {t:"Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us.",r:"Ephesians 3:20"},
+  {t:"May grace and peace be yours in abundance through the knowledge of God and of Jesus our Lord.",r:"2 Peter 1:2"},
+  {t:"Blessed is the one who trusts in the Lord, whose confidence is in him. They will be like a tree planted by the water.",r:"Jeremiah 17:7-8"},
+  {t:"For you are God's handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.",r:"Ephesians 2:10"},
+  {t:"The joy of the Lord is your strength.",r:"Nehemiah 8:10"},
+  {t:"Peace I leave with you; my peace I give you. Do not let your hearts be troubled and do not be afraid.",r:"John 14:27"},
+  {t:"The Lord is my strength and my shield; my heart trusts in him, and he helps me.",r:"Psalm 28:7"},
+  {t:"My grace is sufficient for you, for my power is made perfect in weakness.",r:"2 Corinthians 12:9"},
+  {t:"And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.",r:"Philippians 4:7"},
+  {t:"See what great love the Father has lavished on us, that we should be called children of God!",r:"1 John 3:1"},
+  {t:"Beloved, I pray that you may prosper in all things and be in health, just as your soul prospers.",r:"3 John 1:2"},
+  {t:"Satisfy us in the morning with your unfailing love, that we may sing for joy and be glad all our days.",r:"Psalm 90:14"},
+  {t:"You have made known to me the paths of life; you will fill me with joy in your presence.",r:"Acts 2:28"},
+  {t:"Rejoice in the Lord always. I will say it again: Rejoice!",r:"Philippians 4:4"},
+  {t:"Every good and perfect gift is from above, coming down from the Father of the heavenly lights.",r:"James 1:17"},
+  {t:"May the God of all grace, who called you to his eternal glory in Christ, restore, confirm, strengthen, and establish you.",r:"1 Peter 5:10"},
+  {t:"Now may the Lord of peace himself give you peace at all times and in every way.",r:"2 Thessalonians 3:16"},
+  {t:"I have loved you with an everlasting love; I have drawn you with unfailing kindness.",r:"Jeremiah 31:3"},
+  {t:"Before I formed you in the womb I knew you, before you were born I set you apart.",r:"Jeremiah 1:5"},
+  {t:"You are precious and honored in my sight, and I love you.",r:"Isaiah 43:4"},
+  {t:"Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you.",r:"Isaiah 41:10"},
+  {t:"The Lord himself goes before you and will be with you; he will never leave you nor forsake you.",r:"Deuteronomy 31:8"},
+  {t:"The Lord is gracious and compassionate, slow to anger and rich in love. The Lord is good to all.",r:"Psalm 145:8-9"},
+  {t:"Because of the Lord's great love we are not consumed, for his compassions never fail. They are new every morning; great is your faithfulness.",r:"Lamentations 3:22-23"},
+  {t:"May the favor of the Lord our God rest on us; establish the work of our hands for us.",r:"Psalm 90:17"},
+  {t:"The path of the righteous is like the morning sun, shining ever brighter till the full light of day.",r:"Proverbs 4:18"},
+  {t:"If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.",r:"James 1:5"},
+  {t:"The Lord will watch over your coming and going both now and forevermore.",r:"Psalm 121:8"},
+  {t:"Weeping may stay for the night, but rejoicing comes in the morning.",r:"Psalm 30:5"},
+  {t:"You turned my wailing into dancing; you removed my sackcloth and clothed me with joy.",r:"Psalm 30:11"},
+  {t:"Commit your way to the Lord; trust in him and he will do this: he will make your righteous reward shine like the dawn.",r:"Psalm 37:5-6"},
+  {t:"Praise the Lord, my soul, and forget not all his benefits — who forgives all your sins and heals all your diseases, who redeems your life from the pit and crowns you with love and compassion.",r:"Psalm 103:2-4"},
+  {t:"May he give you the desire of your heart and make all your plans succeed.",r:"Psalm 20:4"},
+  {t:"Cast all your anxiety on him because he cares for you.",r:"1 Peter 5:7"},
+  {t:"May your love abound more and more in knowledge and depth of insight.",r:"Philippians 1:9"},
+  {t:"The Lord is my shepherd, I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul.",r:"Psalm 23:1-3"},
+  {t:"From everlasting to everlasting the Lord's love is with those who fear him.",r:"Psalm 103:17"},
+  {t:"I lift up my eyes to the mountains — where does my help come from? My help comes from the Lord, the Maker of heaven and earth.",r:"Psalm 121:1-2"},
+  {t:"May the Lord make your love increase and overflow for each other and for everyone else.",r:"1 Thessalonians 3:12"},
+  {t:"The grace of our Lord was poured out on me abundantly, along with the faith and love that are in Christ Jesus.",r:"1 Timothy 1:14"},
+];
+
+const blessings = [
+  n=>`Dearest ${n}, on this sacred day of your birth, may heaven bend low to pour its richest grace upon you. You were not born by accident — God knit you together with intentionality, love, and purpose beyond measure. May this new year of your life be filled with moments of divine wonder, deep peace, and the unshakeable joy that only Christ can give. Walk boldly into your future, for the Lord goes before you.`,
+  n=>`Happy Birthday, ${n}! Today we celebrate the beautiful life God breathed into this world — you. May His light shine through everything you do this year, opening doors no one can shut and drawing others closer to His love through your story. You are His masterpiece, and the best chapters of your life are still being written by His faithful hand.`,
+  n=>`${n}, as you mark another year of life, may the Lord fill your heart to overflowing — with gratitude for the past, courage for the present, and radiant hope for the future. May every prayer you have ever whispered find its answer in His perfect timing. May His mercy be your morning song and His presence your greatest treasure throughout this coming year.`,
+  n=>`Blessed Birthday, ${n}! May this day mark the beginning of your most fruitful, most joy-filled year yet. May God's favor rest on you like warm sunlight, may His wisdom guide your every decision, and may His love be the steady anchor when the seas of life grow restless. You are deeply seen, deeply known, and deeply loved by the Creator of the universe.`,
+  n=>`${n}, the Lord has known your name since before the foundations of the earth were laid. Today, on this beautiful birthday, may He remind you of your immeasurable worth in His eyes. May this year bring seasons of growth, moments of laughter, and a deeper revelation of His faithfulness. Go forward with a full heart — you are chosen, you are cherished, and you are called.`,
+  n=>`On this blessed day, ${n}, we lift your name before the Father and ask that He pour out blessing upon blessing over your life. May your faith grow deeper, your joy grow wider, and your love for God and others grow stronger with every passing day. May the coming year be a testimony that makes people marvel at the goodness of God in your life.`,
+  n=>`Dear ${n}, today heaven rejoices over you — for you are a gift to this world, placed here for this exact moment in time. May God's purposes for your life unfold beautifully this year. May you know His peace in the uncertain places, His strength in the difficult ones, and His laughter in the joyful ones. You are never alone; the Lord of heaven walks with you.`,
+  n=>`Happy Birthday, ${n}! May this year be marked by divine appointments, unexpected blessings, and a love so deep you can hardly contain it. May God satisfy your soul with good things and renew your spirit like the eagle. May every doubt fade in the light of His promises, and may this birthday be the first day of the most beautiful season of your life.`,
+];
+
+const closings = [
+  "May God's richest blessings be upon you now and always. Amen. 🙏",
+  "You are loved beyond what words can hold. Happy Birthday! ✝",
+  "Praying God's very best over every moment of your coming year. 🕊",
+  "In Jesus' precious name — may this be your most blessed year yet. Amen.",
+  "Walk boldly; the Lord goes before you. Happy Birthday! 🌟",
+];
+
+/* ════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════ */
+let generatedLink = '';
+let currentBlessingText = '';
+let currentName = '';
+let blessingOpened = false;
+
+/* ════════════════════════════════════════════
+   ROUTING
+════════════════════════════════════════════ */
+function route() {
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  if (name && name.trim()) {
+    currentName = decodeURIComponent(name.trim());
+    showRecipient(currentName);
+  } else {
+    show('view-creator');
+  }
+}
+
+function show(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showRecipient(name) {
+  show('view-recipient');
+  document.title = `Happy Birthday, ${name}! 🎂`;
+  document.getElementById('cel-title').textContent = `Happy Birthday, ${name}! 🎂`;
+}
+
+function goCreate() {
+  window.history.pushState({}, '', window.location.pathname);
+  show('view-creator');
+}
+
+/* ════════════════════════════════════════════
+   CREATOR
+════════════════════════════════════════════ */
+function createLink() {
+  const raw = document.getElementById('creator-name').value.trim();
+  if (!raw) { showToast('Please enter a name first ✨'); document.getElementById('creator-name').focus(); return; }
+  const encoded = encodeURIComponent(raw);
+  generatedLink = `${location.origin}${location.pathname}?name=${encoded}`;
+  const box = document.getElementById('link-box');
+  box.textContent = generatedLink;
+  box.style.display = 'block';
+  document.getElementById('link-actions').style.display = 'flex';
+  showToast('Link created! Share it with love 🎁');
+}
+
+function copyLink() {
+  if (!generatedLink) { showToast('Create a link first!'); return; }
+  writeClip(generatedLink, 'Link copied to clipboard! 🔗');
+}
+
+function shareLink() {
+  if (!generatedLink) return;
+  const name = document.getElementById('creator-name').value.trim() || 'someone special';
+  if (navigator.share) {
+    navigator.share({ title:`Birthday Blessing for ${name}`, url: generatedLink }).catch(()=>{});
+  } else { copyLink(); }
+}
+
+function previewLink() {
+  if (!generatedLink) return;
+  window.open(generatedLink, '_blank');
+}
+
+/* ════════════════════════════════════════════
+   OPEN BLESSING
+════════════════════════════════════════════ */
+function openBlessing() {
+  if (blessingOpened) return;
+  blessingOpened = true;
+
+  const name = currentName || 'Beloved';
+  const bTemplate = blessings[Math.floor(Math.random() * blessings.length)];
+  const closing   = closings[Math.floor(Math.random() * closings.length)];
+  const verse     = verses[Math.floor(Math.random() * verses.length)];
+  const body      = bTemplate(name) + ' ' + closing;
+  currentBlessingText = `🎉 Happy Birthday, ${name}! 🎂\n\n${body}\n\n"${verse.t}"\n— ${verse.r}`;
+
+  document.getElementById('bday-headline').textContent = `🎉 Happy Birthday, ${name}! 🎂`;
+  document.getElementById('blessing-body').textContent = body;
+  document.getElementById('verse-text').textContent = verse.t;
+  document.getElementById('verse-ref').textContent = '— ' + verse.r;
+
+  // Hide gift button with fade
+  const wrap = document.getElementById('gift-wrap');
+  wrap.style.transition = 'opacity .4s, transform .4s';
+  wrap.style.opacity = '0'; wrap.style.transform = 'scale(.95)';
+  setTimeout(() => { wrap.style.display = 'none'; }, 420);
+
+  // Reveal blessing
+  setTimeout(() => {
+    const el = document.getElementById('blessing-reveal');
+    el.style.display = 'block';
+    requestAnimationFrame(() => el.classList.add('shown'));
+  }, 450);
+
+  launchConfetti();
+}
+
+/* ════════════════════════════════════════════
+   RECIPIENT ACTIONS
+════════════════════════════════════════════ */
+function copyBlessing() {
+  if (!currentBlessingText) return;
+  writeClip(currentBlessingText, 'Blessing copied! ✨');
+}
+
+function shareBlessing() {
+  if (!currentBlessingText) return;
+  if (navigator.share) {
+    navigator.share({ title:`Birthday Blessing for ${currentName}`, text: currentBlessingText }).catch(()=>{});
+  } else { copyBlessing(); }
+}
+
+function downloadCard() {
+  if (!currentBlessingText) { showToast('Open the blessing first!'); return; }
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200; canvas.height = 820;
+  const ctx = canvas.getContext('2d');
+
+  // BG
+  const g = ctx.createLinearGradient(0,0,1200,820);
+  g.addColorStop(0,'#FAF5EB'); g.addColorStop(.5,'#F0E6CC'); g.addColorStop(1,'#E8D4A8');
+  ctx.fillStyle = g; ctx.fillRect(0,0,1200,820);
+
+  // Decorative border
+  ctx.strokeStyle='#C8961E'; ctx.lineWidth=6; roundRect(ctx,16,16,1168,788,18,'stroke');
+  ctx.strokeStyle='rgba(200,150,30,.4)'; ctx.lineWidth=1.5; roundRect(ctx,30,30,1140,760,14,'stroke');
+
+  // Cross
+  ctx.fillStyle='#C8961E'; ctx.font='bold 48px serif'; ctx.textAlign='center';
+  ctx.fillText('✝',600,82);
+
+  // Headline
+  ctx.font='bold 40px Georgia,serif'; ctx.fillStyle='#7A5A10';
+  ctx.fillText(`🎉 Happy Birthday, ${currentName}! 🎂`,600,140);
+
+  // Divider
+  ctx.strokeStyle='rgba(200,150,30,.5)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(80,162); ctx.lineTo(1120,162); ctx.stroke();
+
+  // Blessing
+  ctx.font='italic 21px Georgia,serif'; ctx.fillStyle='#1E1408'; ctx.textAlign='left';
+  const body = document.getElementById('blessing-body').textContent;
+  wrapText(ctx, body, 80, 200, 1040, 34, 490);
+
+  // Verse box
+  ctx.fillStyle='rgba(200,150,30,.09)';
+  roundRect(ctx,70,530,1060,168,16,'fill');
+  ctx.strokeStyle='rgba(200,150,30,.4)'; ctx.lineWidth=1;
+  roundRect(ctx,70,530,1060,168,16,'stroke');
+
+  ctx.font='italic 19px Georgia,serif'; ctx.fillStyle='#1E1408'; ctx.textAlign='left';
+  wrapText(ctx, '"'+document.getElementById('verse-text').textContent+'"', 100, 566, 1000, 30, 660);
+
+  ctx.font='16px Georgia,serif'; ctx.fillStyle='#7A5A10'; ctx.textAlign='right';
+  ctx.fillText(document.getElementById('verse-ref').textContent, 1110, 682);
+
+  // Footer
+  ctx.textAlign='center'; ctx.font='13px Georgia,serif'; ctx.fillStyle='#4A3820'; ctx.globalAlpha=.55;
+  ctx.fillText('Christian Birthday Blessing • Share God\'s love',600,780);
+  ctx.globalAlpha=1;
+
+  const a=document.createElement('a');
+  a.download=`blessing-${currentName.replace(/\s+/g,'-').toLowerCase()}.png`;
+  a.href=canvas.toDataURL('image/png'); a.click();
+  showToast('Birthday card downloaded! 🎉');
+}
+
+function roundRect(ctx,x,y,w,h,r,mode){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+  if(mode==='fill') ctx.fill(); else ctx.stroke();
+}
+function wrapText(ctx,text,x,y,maxW,lineH,maxY){
+  const words=text.split(' '); let line='',cy=y;
+  for(let i=0;i<words.length;i++){
+    const test=line+words[i]+' ';
+    if(ctx.measureText(test).width>maxW&&i>0){
+      ctx.fillText(line,x,cy); line=words[i]+' '; cy+=lineH;
+      if(cy>maxY){ctx.fillText('…',x,cy);return;}
+    } else line=test;
+  }
+  ctx.fillText(line,x,cy);
+}
+
+/* ════════════════════════════════════════════
+   CONFETTI
+════════════════════════════════════════════ */
+function launchConfetti(){
+  const cv=document.getElementById('conf-canvas');
+  const ctx=cv.getContext('2d');
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  const colors=['#C8961E','#E8BE5A','#9B3A54','#3D6B52','#2D5F84','#F0E6CC','#fff','#FFD700'];
+  const P=Array.from({length:160},()=>({
+    x:Math.random()*cv.width, y:-20,
+    s:4+Math.random()*9,
+    c:colors[Math.floor(Math.random()*colors.length)],
+    sh:['c','s','t'][Math.floor(Math.random()*3)],
+    vx:(Math.random()-.5)*5, vy:2+Math.random()*5,
+    rot:Math.random()*Math.PI*2, rv:(Math.random()-.5)*.18, a:1
+  }));
+  let fr=0;
+  (function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    P.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.vy+=.07; p.rot+=p.rv;
+      if(fr>80)p.a-=.013;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha=Math.max(0,p.a); ctx.fillStyle=p.c;
+      if(p.sh==='c'){ctx.beginPath();ctx.arc(0,0,p.s/2,0,Math.PI*2);ctx.fill();}
+      else if(p.sh==='s'){ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);}
+      else{
+        ctx.beginPath(); let ang=-Math.PI/2;
+        for(let i=0;i<5;i++){
+          ctx.lineTo(Math.cos(ang)*p.s,Math.sin(ang)*p.s); ang+=Math.PI*.4;
+          ctx.lineTo(Math.cos(ang)*(p.s*.45),Math.sin(ang)*(p.s*.45)); ang+=Math.PI*.4;
+        }
+        ctx.closePath(); ctx.fill();
+      }
+      ctx.restore();
+    });
+    fr++;
+    if(fr<220)requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+
+/* ════════════════════════════════════════════
+   BACKGROUND PATTERN
+════════════════════════════════════════════ */
+(function bgPattern(){
+  const cv=document.getElementById('bg-canvas');
+  const ctx=cv.getContext('2d');
+  function render(){
+    cv.width=window.innerWidth; cv.height=window.innerHeight;
+    const dark=document.documentElement.getAttribute('data-theme')==='dark';
+    ctx.strokeStyle=dark?'rgba(200,150,30,.06)':'rgba(200,150,30,.11)';
+    ctx.lineWidth=.7;
+    const sp=72;
+    for(let x=0;x<cv.width;x+=sp){
+      for(let y=0;y<cv.height;y+=sp){
+        const cx=x+sp/2, cy=y+sp/2;
+        ctx.beginPath(); ctx.moveTo(cx-7,cy); ctx.lineTo(cx+7,cy);
+        ctx.moveTo(cx,cy-9); ctx.lineTo(cx,cy+9); ctx.stroke();
+      }
+    }
+  }
+  window.addEventListener('resize',render);
+  new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  render();
+})();
+
+/* ════════════════════════════════════════════
+   FLOATING ELEMENTS
+════════════════════════════════════════════ */
+(function floats(){
+  const layer=document.getElementById('floats-layer');
+  const emojis=['🎈','🎈','🎉','🎊','🕊','⭐','✨','🌟','🎈'];
+  let n=0;
+  function spawn(){
+    if(n>14)return;
+    const el=document.createElement('div');
+    el.className='float';
+    el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left=Math.random()*95+'%';
+    el.style.fontSize=(1.2+Math.random()*1.3)+'rem';
+    const dur=10+Math.random()*14;
+    el.style.animationDuration=dur+'s';
+    el.style.animationDelay=(Math.random()*5)+'s';
+    layer.appendChild(el); n++;
+    el.addEventListener('animationend',()=>{el.remove();n--;setTimeout(spawn,500+Math.random()*2500);});
+  }
+  for(let i=0;i<7;i++)setTimeout(spawn,i*700);
+})();
+
+/* ════════════════════════════════════════════
+   THEME
+════════════════════════════════════════════ */
+let dark=false;
+function toggleTheme(){
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('t-icon').textContent=dark?'☀️':'🌙';
+  document.getElementById('t-lbl').textContent=dark?'Light':'Dark';
+}
+
+/* ════════════════════════════════════════════
+   UTILS
+════════════════════════════════════════════ */
+function writeClip(text, msg){
+  navigator.clipboard.writeText(text)
+    .then(()=>showToast(msg))
+    .catch(()=>{
+      const ta=document.createElement('textarea');
+      ta.value=text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); showToast(msg);
+    });
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// Enter key on creator
+document.getElementById('creator-name').addEventListener('keydown',e=>{
+  if(e.key==='Enter') createLink();
+});
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+route();
+</script>
+</body>
+</html>
