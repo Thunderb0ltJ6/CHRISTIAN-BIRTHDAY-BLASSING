@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Birthday Blessing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9973a;
+    --gold-light: #e8c46a;
+    --gold-dark: #8a6420;
+    --cream: #fdf6ec;
+    --cream-deep: #f5e8d0;
+    --parchment: #ede0c4;
+    --ink: #2c1f0e;
+    --ink-soft: #5a4228;
+    --burgundy: #7b2d42;
+    --sage: #4a7c59;
+    --sky: #3a6b8a;
+    --rose: #c9697a;
+    --bg: var(--cream);
+    --card-bg: rgba(255,255,255,0.92);
+    --text: var(--ink);
+    --text-soft: var(--ink-soft);
+    --border: rgba(201,151,58,0.25);
+    --shadow: rgba(44,31,14,0.12);
+    --input-bg: rgba(253,246,236,0.9);
+  }
+  [data-theme="dark"] {
+    --bg: #1a1108;
+    --card-bg: rgba(30,20,8,0.96);
+    --text: #f5e8d0;
+    --text-soft: #c9b08a;
+    --border: rgba(201,151,58,0.3);
+    --shadow: rgba(0,0,0,0.4);
+    --input-bg: rgba(40,28,10,0.9);
+    --cream: #1a1108;
+    --parchment: #2c1f0e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.4s, color 0.4s;
+    overflow-x: hidden;
+  }
+
+  /* ── Background canvas ── */
+  #bg-canvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.55;
+  }
+
+  /* ── Confetti canvas ── */
+  #confetti-canvas {
+    position: fixed; inset: 0; pointer-events: none; z-index: 100;
+  }
+
+  /* ── Layout ── */
+  .page {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 2rem 1.2rem 4rem;
+  }
+
+  /* ── Theme toggle ── */
+  .theme-toggle {
+    position: fixed; top: 1.2rem; right: 1.2rem; z-index: 200;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.45rem 1rem;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--gold);
+    box-shadow: 0 2px 12px var(--shadow);
+    transition: all 0.3s;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .theme-toggle:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--shadow); }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeDown 0.9s ease both;
+  }
+  .cross-ornament {
+    font-size: 2.2rem;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.5rem;
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%,100% { text-shadow: 0 0 8px rgba(201,151,58,0.3); }
+    50% { text-shadow: 0 0 24px rgba(201,151,58,0.7), 0 0 40px rgba(201,151,58,0.3); }
+  }
+  .title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-soft);
+    margin-top: 0.4rem;
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+  .ornament-line {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0.8rem; margin: 1rem auto 0;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+  .ornament-line::before, .ornament-line::after {
+    content: ''; flex: 1; max-width: 120px;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 2.5rem 2.2rem;
+    max-width: 680px;
+    width: 100%;
+    box-shadow: 0 8px 48px var(--shadow), 0 1px 0 rgba(255,255,255,0.6) inset;
+    backdrop-filter: blur(12px);
+    animation: fadeUp 0.9s 0.2s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--burgundy), var(--gold), var(--gold-light), var(--gold), var(--sage));
+  }
+
+  /* ── Input area ── */
+  .input-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .input-row {
+    display: flex; gap: 0.8rem;
+    margin-bottom: 1.6rem;
+  }
+  .name-input {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .name-input::placeholder { color: var(--text-soft); opacity: 0.6; }
+  .name-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,151,58,0.15);
+  }
+  .generate-btn {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.85rem 1.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(138,100,32,0.35);
+  }
+  .generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(138,100,32,0.45);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  }
+  .generate-btn:active { transform: translateY(0); }
+
+  /* ── Blessing output ── */
+  #blessing-output {
+    display: none;
+    animation: fadeUp 0.7s ease both;
+  }
+  .blessing-divider {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 0 0 1.8rem;
+    color: var(--gold);
+  }
+  .blessing-divider::before, .blessing-divider::after {
+    content: ''; flex: 1;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .birthday-headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 700;
+    text-align: center;
+    color: var(--gold-dark);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+  [data-theme="dark"] .birthday-headline { color: var(--gold-light); }
+
+  .blessing-text {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--text);
+    text-align: center;
+    margin: 1.2rem 0 1.8rem;
+    font-style: italic;
+  }
+
+  /* ── Verse card ── */
+  .verse-card {
+    background: linear-gradient(135deg, rgba(201,151,58,0.08), rgba(201,151,58,0.04));
+    border: 1px solid rgba(201,151,58,0.3);
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    margin: 1.4rem 0;
+    position: relative;
+  }
+  .verse-card::before {
+    content: '\201C';
+    position: absolute; top: -0.4rem; left: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: var(--gold);
+    opacity: 0.35;
+    line-height: 1;
+  }
+  .verse-text {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--text);
+    font-style: italic;
+    font-weight: 400;
+    padding-left: 0.5rem;
+  }
+  .verse-ref {
+    display: block;
+    text-align: right;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-dark);
+    margin-top: 0.8rem;
+    font-style: normal;
+  }
+  [data-theme="dark"] .verse-ref { color: var(--gold-light); }
+
+  /* ── Action buttons ── */
+  .action-row {
+    display: flex; flex-wrap: wrap; gap: 0.7rem;
+    justify-content: center;
+    margin-top: 1.6rem;
+  }
+  .action-btn {
+    display: flex; align-items: center; gap: 0.45rem;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    padding: 0.6rem 1.2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .action-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold-dark);
+    background: rgba(201,151,58,0.08);
+    transform: translateY(-1px);
+  }
+  [data-theme="dark"] .action-btn:hover { color: var(--gold-light); }
+  .action-btn svg { width: 15px; height: 15px; }
+
+  /* ── Floating balloons ── */
+  .balloons-layer {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .balloon {
+    position: absolute;
+    bottom: -120px;
+    font-size: 2.2rem;
+    animation: floatUp linear infinite;
+    opacity: 0.55;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
+  }
+  @keyframes floatUp {
+    0% { transform: translateX(0) rotate(-5deg); opacity: 0; }
+    10% { opacity: 0.55; }
+    50% { transform: translateX(20px) rotate(5deg); }
+    90% { opacity: 0.55; }
+    100% { transform: translateX(-10px) rotate(-3deg) translateY(-110vh); opacity: 0; }
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(4rem);
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.7rem 1.6rem;
+    border-radius: 50px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    z-index: 999;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── Download card ── */
+  #download-card {
+    position: fixed; left: -9999px; top: 0;
+    width: 900px; padding: 60px;
+    background: #fdf6ec;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #2c1f0e;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--text-soft);
+    opacity: 0.6;
+    font-style: italic;
+    animation: fadeUp 1s 0.5s ease both;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 520px) {
+    .input-row { flex-direction: column; }
+    .card { padding: 1.8rem 1.3rem; }
+    .action-row { gap: 0.5rem; }
+    .action-btn { font-size: 0.88rem; padding: 0.55rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+
+<div class="balloons-layer" id="balloons-layer"></div>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+  <span id="theme-icon">🌙</span> <span id="theme-label">Dark Mode</span>
+</button>
+
+<div class="page">
+  <header class="header">
+    <span class="cross-ornament">✝</span>
+    <h1 class="title">Birthday Blessing</h1>
+    <p class="subtitle">A sacred gift of words, wrapped in grace</p>
+    <div class="ornament-line">✦ ✦ ✦</div>
+  </header>
+
+  <main class="card" id="main-card">
+    <label class="input-label" for="name-input">Enter the birthday person's name</label>
+    <div class="input-row">
+      <input class="name-input" id="name-input" type="text" placeholder="e.g. Sarah, beloved of God…" maxlength="60" autocomplete="off">
+      <button class="generate-btn" onclick="generateBlessing()">🕊 Bless</button>
+    </div>
+
+    <div id="blessing-output">
+      <div class="blessing-divider">🎂</div>
+      <h2 class="birthday-headline" id="headline-text"></h2>
+
+      <p class="blessing-text" id="blessing-body"></p>
+
+      <div class="verse-card">
+        <p class="verse-text" id="verse-text"></p>
+        <span class="verse-ref" id="verse-ref"></span>
+      </div>
+
+      <div class="action-row">
+        <button class="action-btn" onclick="copyBlessing()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy Blessing
+        </button>
+        <button class="action-btn" onclick="shareBlessing()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share
+        </button>
+        <button class="action-btn" onclick="downloadCard()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Card
+        </button>
+        <button class="action-btn" onclick="generateBlessing()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          New Blessing
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    "For I know the plans I have for you," declares the Lord — Jeremiah 29:11
+  </footer>
+</div>
+
+<!-- Hidden download card -->
+<div id="download-card"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Bible verses (100+) ──────────────────────────────────────────────────────
+const verses = [
+  { text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.", ref: "Jeremiah 29:11" },
+  { text: "The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you; the Lord turn his face toward you and give you peace.", ref: "Numbers 6:24-26" },
+  { text: "This is the day the Lord has made; let us rejoice and be glad in it.", ref: "Psalm 118:24" },
+  { text: "May he give you the desire of your heart and make all your plans succeed.", ref: "Psalm 20:4" },
+  { text: "I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.", ref: "Psalm 139:14" },
+  { text: "For you created my inmost being; you knit me together in my mother's womb.", ref: "Psalm 139:13" },
+  { text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.", ref: "Proverbs 3:5-6" },
+  { text: "The Lord is my shepherd, I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul.", ref: "Psalm 23:1-3" },
+  { text: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.", ref: "Romans 15:13" },
+  { text: "I can do all this through him who gives me strength.", ref: "Philippians 4:13" },
+  { text: "Delight yourself in the Lord, and he will give you the desires of your heart.", ref: "Psalm 37:4" },
+  { text: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", ref: "Joshua 1:9" },
+  { text: "And we know that in all things God works for the good of those who love him, who have been called according to his purpose.", ref: "Romans 8:28" },
+  { text: "Your word is a lamp for my feet, a light on my path.", ref: "Psalm 119:105" },
+  { text: "The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you; in his love he will no longer rebuke you, but will rejoice over you with singing.", ref: "Zephaniah 3:17" },
+  { text: "Give thanks to the Lord, for he is good; his love endures forever.", ref: "Psalm 107:1" },
+  { text: "Taste and see that the Lord is good; blessed is the one who takes refuge in him.", ref: "Psalm 34:8" },
+  { text: "For the Lord God is a sun and shield; the Lord bestows favor and honor; no good thing does he withhold from those whose walk is blameless.", ref: "Psalm 84:11" },
+  { text: "You are altogether beautiful, my darling; there is no flaw in you.", ref: "Song of Solomon 4:7" },
+  { text: "How precious to me are your thoughts, God! How vast is the sum of them!", ref: "Psalm 139:17" },
+  { text: "Surely goodness and love will follow me all the days of my life, and I will dwell in the house of the Lord forever.", ref: "Psalm 23:6" },
+  { text: "May the Lord direct your hearts into God's love and Christ's perseverance.", ref: "2 Thessalonians 3:5" },
+  { text: "I have come that they may have life, and have it to the full.", ref: "John 10:10" },
+  { text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.", ref: "Isaiah 40:31" },
+  { text: "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?", ref: "Psalm 27:1" },
+  { text: "For the Lord takes delight in his people; he crowns the humble with victory.", ref: "Psalm 149:4" },
+  { text: "He who began a good work in you will carry it on to completion until the day of Christ Jesus.", ref: "Philippians 1:6" },
+  { text: "Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us.", ref: "Ephesians 3:20" },
+  { text: "The grace of our Lord Jesus Christ be with your spirit.", ref: "Galatians 6:18" },
+  { text: "May grace and peace be yours in abundance through the knowledge of God and of Jesus our Lord.", ref: "2 Peter 1:2" },
+  { text: "Grace and peace to you from God our Father and the Lord Jesus Christ.", ref: "Philippians 1:2" },
+  { text: "Blessed is the one who trusts in the Lord, whose confidence is in him. They will be like a tree planted by the water.", ref: "Jeremiah 17:7-8" },
+  { text: "The Lord bless you and keep you; the Lord make his face shine on you.", ref: "Numbers 6:24-25" },
+  { text: "For you are God's handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.", ref: "Ephesians 2:10" },
+  { text: "The steps of a good man are ordered by the Lord, and He delights in his way.", ref: "Psalm 37:23" },
+  { text: "May the Lord, the God of your ancestors, increase you a thousand times and bless you as he has promised!", ref: "Deuteronomy 1:11" },
+  { text: "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.", ref: "Matthew 7:7" },
+  { text: "The joy of the Lord is your strength.", ref: "Nehemiah 8:10" },
+  { text: "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven.", ref: "Matthew 5:16" },
+  { text: "You are the light of the world. A town built on a hill cannot be hidden.", ref: "Matthew 5:14" },
+  { text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", ref: "John 3:16" },
+  { text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.", ref: "John 14:27" },
+  { text: "Come to me, all you who are weary and burdened, and I will give you rest.", ref: "Matthew 11:28" },
+  { text: "The Lord is my strength and my shield; my heart trusts in him, and he helps me.", ref: "Psalm 28:7" },
+  { text: "Blessed are those who find wisdom, those who gain understanding, for she is more profitable than silver and yields better returns than gold.", ref: "Proverbs 3:13-14" },
+  { text: "My grace is sufficient for you, for my power is made perfect in weakness.", ref: "2 Corinthians 12:9" },
+  { text: "Cast all your anxiety on him because he cares for you.", ref: "1 Peter 5:7" },
+  { text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.", ref: "Philippians 4:6" },
+  { text: "And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.", ref: "Philippians 4:7" },
+  { text: "For this reason I kneel before the Father, from whom every family in heaven and on earth derives its name.", ref: "Ephesians 3:14-15" },
+  { text: "See what great love the Father has lavished on us, that we should be called children of God!", ref: "1 John 3:1" },
+  { text: "Beloved, I pray that you may prosper in all things and be in health, just as your soul prospers.", ref: "3 John 1:2" },
+  { text: "Satisfy us in the morning with your unfailing love, that we may sing for joy and be glad all our days.", ref: "Psalm 90:14" },
+  { text: "You have made known to me the paths of life; you will fill me with joy in your presence.", ref: "Acts 2:28" },
+  { text: "The Lord has done it this very day; let us rejoice today and be glad.", ref: "Psalm 118:24" },
+  { text: "Praise the Lord. How good it is to sing praises to our God, how pleasant and fitting to praise him!", ref: "Psalm 147:1" },
+  { text: "I will praise you, for I am fearfully and wonderfully made; marvelous are your works, and that my soul knows very well.", ref: "Psalm 139:14" },
+  { text: "Know that the Lord is God. It is he who made us, and we are his; we are his people, the sheep of his pasture.", ref: "Psalm 100:3" },
+  { text: "For the Lord is good and his love endures forever; his faithfulness continues through all generations.", ref: "Psalm 100:5" },
+  { text: "May he give you the desire of your heart and make all your plans succeed.", ref: "Psalm 20:4" },
+  { text: "The Lord will watch over your coming and going both now and forevermore.", ref: "Psalm 121:8" },
+  { text: "I lift up my eyes to the mountains—where does my help come from? My help comes from the Lord, the Maker of heaven and earth.", ref: "Psalm 121:1-2" },
+  { text: "The Lord will keep you from all harm—he will watch over your life.", ref: "Psalm 121:7" },
+  { text: "Blessed is everyone who fears the Lord, who walks in his ways! You shall eat the fruit of the labor of your hands; you shall be blessed, and it shall be well with you.", ref: "Psalm 128:1-2" },
+  { text: "Children are a heritage from the Lord, offspring a reward from him.", ref: "Psalm 127:3" },
+  { text: "Weeping may stay for the night, but rejoicing comes in the morning.", ref: "Psalm 30:5" },
+  { text: "You turned my wailing into dancing; you removed my sackcloth and clothed me with joy.", ref: "Psalm 30:11" },
+  { text: "The Lord is near to all who call on him, to all who call on him in truth.", ref: "Psalm 145:18" },
+  { text: "Every good and perfect gift is from above, coming down from the Father of the heavenly lights.", ref: "James 1:17" },
+  { text: "Beloved, let us love one another, for love is from God, and whoever loves has been born of God and knows God.", ref: "1 John 4:7" },
+  { text: "May the God of all grace, who called you to his eternal glory in Christ, restore, confirm, strengthen, and establish you.", ref: "1 Peter 5:10" },
+  { text: "Now may the Lord of peace himself give you peace at all times and in every way.", ref: "2 Thessalonians 3:16" },
+  { text: "Now may the God of hope fill you with all joy and peace in believing.", ref: "Romans 15:13" },
+  { text: "May your love abound more and more in knowledge and depth of insight.", ref: "Philippians 1:9" },
+  { text: "Being confident of this, that he who began a good work in you will carry it on to completion.", ref: "Philippians 1:6" },
+  { text: "Rejoice in the Lord always. I will say it again: Rejoice!", ref: "Philippians 4:4" },
+  { text: "This is the confidence we have in approaching God: that if we ask anything according to his will, he hears us.", ref: "1 John 5:14" },
+  { text: "Let us then approach God's throne of grace with confidence, so that we may receive mercy and find grace to help us in our time of need.", ref: "Hebrews 4:16" },
+  { text: "The Lord your God is in your midst, a mighty one who will save; he will rejoice over you with gladness; he will quiet you by his love.", ref: "Zephaniah 3:17" },
+  { text: "I have loved you with an everlasting love; I have drawn you with unfailing kindness.", ref: "Jeremiah 31:3" },
+  { text: "Before I formed you in the womb I knew you, before you were born I set you apart.", ref: "Jeremiah 1:5" },
+  { text: "You are precious and honored in my sight, and I love you.", ref: "Isaiah 43:4" },
+  { text: "Fear not, for I have redeemed you; I have summoned you by name; you are mine.", ref: "Isaiah 43:1" },
+  { text: "When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you.", ref: "Isaiah 43:2" },
+  { text: "Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you.", ref: "Isaiah 41:10" },
+  { text: "The Lord himself goes before you and will be with you; he will never leave you nor forsake you.", ref: "Deuteronomy 31:8" },
+  { text: "May the Lord your God be with you, as he was with our ancestors; may he never leave you nor forsake you.", ref: "1 Kings 8:57" },
+  { text: "Great is the Lord and most worthy of praise; his greatness no one can fathom.", ref: "Psalm 145:3" },
+  { text: "The Lord is gracious and compassionate, slow to anger and rich in love. The Lord is good to all; he has compassion on all he has made.", ref: "Psalm 145:8-9" },
+  { text: "Praise the Lord, my soul, and forget not all his benefits—who forgives all your sins and heals all your diseases, who redeems your life from the pit and crowns you with love and compassion.", ref: "Psalm 103:2-4" },
+  { text: "As a father has compassion on his children, so the Lord has compassion on those who fear him.", ref: "Psalm 103:13" },
+  { text: "From everlasting to everlasting the Lord's love is with those who fear him.", ref: "Psalm 103:17" },
+  { text: "The Lord is my rock, my fortress and my deliverer; my God is my rock, in whom I take refuge.", ref: "Psalm 18:2" },
+  { text: "Commit your way to the Lord; trust in him and he will do this: he will make your righteous reward shine like the dawn.", ref: "Psalm 37:5-6" },
+  { text: "Wait for the Lord; be strong and take heart and wait for the Lord.", ref: "Psalm 27:14" },
+  { text: "The Lord is my portion; therefore I will wait for him.", ref: "Lamentations 3:24" },
+  { text: "Because of the Lord's great love we are not consumed, for his compassions never fail. They are new every morning; great is your faithfulness.", ref: "Lamentations 3:22-23" },
+  { text: "May the favor of the Lord our God rest on us; establish the work of our hands for us.", ref: "Psalm 90:17" },
+  { text: "A joyful heart is good medicine, but a crushed spirit dries up the bones.", ref: "Proverbs 17:22" },
+  { text: "She is clothed with strength and dignity; she can laugh at the days to come.", ref: "Proverbs 31:25" },
+  { text: "Gray hair is a crown of splendor; it is attained in the way of righteousness.", ref: "Proverbs 16:31" },
+  { text: "The path of the righteous is like the morning sun, shining ever brighter till the full light of day.", ref: "Proverbs 4:18" },
+  { text: "May the Lord make your love increase and overflow for each other and for everyone else.", ref: "1 Thessalonians 3:12" },
+  { text: "May God himself, the God of peace, sanctify you through and through.", ref: "1 Thessalonians 5:23" },
+  { text: "The grace of our Lord was poured out on me abundantly, along with the faith and love that are in Christ Jesus.", ref: "1 Timothy 1:14" },
+  { text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.", ref: "James 1:5" },
+];
+
+// ── Blessing templates ───────────────────────────────────────────────────────
+const blessingTemplates = [
+  n => `Dear ${n}, on this blessed day of your birth, may the Lord wrap you in His boundless grace and fill every corner of your heart with unspeakable joy. May this new year of your life be marked by divine favor, fresh beginnings, and the sweet awareness that you are deeply loved by your Creator. Go forward knowing that God's hand is upon you, guiding each step and blessing every dream.`,
+  n => `Happy Birthday, ${n}! Today heaven rejoices over you, for you are a masterpiece lovingly crafted by God's own hand. May this year bring you seasons of growth, moments of wonder, and the unshakable peace that only Christ can give. May His light shine through you so brightly that everyone around you sees something of the divine. You are a gift to this world.`,
+  n => `On this special day, ${n}, we lift your name before the Father and ask that He pour out blessing upon blessing over your life. May you walk in wisdom, dwell in His love, and discover new dimensions of His faithfulness throughout this coming year. May your laughter be full, your purpose be clear, and your faith grow deeper with every passing day.`,
+  n => `${n}, today we celebrate the beautiful life God breathed into being — you! May every sunrise this year remind you of His mercies made new for you each morning. May doors of opportunity swing wide open, may relationships be enriched by His love, and may you sense His presence in the ordinary moments. You are chosen, cherished, and called for such a time as this.`,
+  n => `Blessed Birthday, ${n}! As you step into this new year of life, may the Lord be your constant companion — your strength on hard days, your song on joyful ones. May your heart overflow with gratitude, may your spirit soar on eagle's wings, and may every promise God has whispered over your life come to glorious fulfillment. The best is yet to come!`,
+  n => `Dear ${n}, this day belongs to you and to the God who lovingly planned your existence before time began. May He bless the work of your hands, guard your coming and going, and surround you with favor as with a shield. May this year be a chapter in your story that you look back on with wonder, saying, "The Lord has done great things for me."`,
+  n => `${n}, may this birthday mark a fresh and beautiful chapter written by the hand of God. May His peace rule your heart, His wisdom guide your decisions, and His joy be your daily strength. You carry His image and His purposes within you — walk boldly into this new year knowing you are never alone. Heaven is cheering you on!`,
+  n => `Today we celebrate YOU, ${n} — a soul uniquely and intentionally created for God's glory. May the Lord bless this year with abundant grace, meaningful purpose, and deep contentment in His love. May every prayer you've prayed be answered in His perfect timing, and may your heart be filled to overflowing with all that is good and beautiful and true. Happy Birthday!`,
+];
+
+const closings = [
+  "May God's richest blessings be upon you now and always. Amen. 🙏",
+  "You are loved beyond measure. Happy Birthday! 🎂",
+  "Praying God's very best over every moment of your new year. 🕊",
+  "May this be your most blessed year yet. In Jesus' name, Amen. ✝",
+  "Walk boldly — the Lord goes before you. Happy Birthday! 🌟",
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+let currentBlessing = '';
+let currentName = '';
+let isDark = false;
+
+// ── Generate ─────────────────────────────────────────────────────────────────
+function generateBlessing() {
+  const name = document.getElementById('name-input').value.trim();
+  if (!name) {
+    showToast('Please enter a name first ✨');
+    document.getElementById('name-input').focus();
+    return;
+  }
+  currentName = name;
+
+  const template = blessingTemplates[Math.floor(Math.random() * blessingTemplates.length)];
+  const closing = closings[Math.floor(Math.random() * closings.length)];
+  const verse = verses[Math.floor(Math.random() * verses.length)];
+  const blessing = template(name);
+
+  document.getElementById('headline-text').textContent = `🎉 Happy Birthday, ${name}! 🎂`;
+  document.getElementById('blessing-body').textContent = blessing + ' ' + closing;
+  document.getElementById('verse-text').textContent = verse.text;
+  document.getElementById('verse-ref').textContent = '— ' + verse.ref;
+
+  currentBlessing = `🎉 Happy Birthday, ${name}! 🎂\n\n${blessing} ${closing}\n\n"${verse.text}"\n— ${verse.ref}`;
+
+  const output = document.getElementById('blessing-output');
+  output.style.display = 'block';
+  output.style.animation = 'none';
+  requestAnimationFrame(() => {
+    output.style.animation = 'fadeUp 0.7s ease both';
+  });
+
+  launchConfetti();
+  scrollToOutput();
+}
+
+function scrollToOutput() {
+  setTimeout(() => {
+    document.getElementById('blessing-output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+function copyBlessing() {
+  navigator.clipboard.writeText(currentBlessing)
+    .then(() => showToast('Blessing copied to clipboard! ✨'))
+    .catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = currentBlessing;
+      document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Blessing copied! ✨');
+    });
+}
+
+function shareBlessing() {
+  if (navigator.share) {
+    navigator.share({ title: `Birthday Blessing for ${currentName}`, text: currentBlessing })
+      .catch(() => {});
+  } else {
+    copyBlessing();
+    showToast('Link copied — share with someone special! 🎁');
+  }
+}
+
+function downloadCard() {
+  const blessingBody = document.getElementById('blessing-body').textContent;
+  const verseText = document.getElementById('verse-text').textContent;
+  const verseRef = document.getElementById('verse-ref').textContent;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200; canvas.height = 800;
+  const ctx = canvas.getContext('2d');
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, 1200, 800);
+  grad.addColorStop(0, '#fdf6ec');
+  grad.addColorStop(0.5, '#f5e8d0');
+  grad.addColorStop(1, '#ede0c4');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 1200, 800);
+
+  // Gold border
+  ctx.strokeStyle = '#c9973a';
+  ctx.lineWidth = 6;
+  ctx.strokeRect(20, 20, 1160, 760);
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(34, 34, 1132, 732);
+
+  // Cross
+  ctx.font = 'bold 42px serif';
+  ctx.fillStyle = '#c9973a';
+  ctx.textAlign = 'center';
+  ctx.fillText('✝', 600, 80);
+
+  // Headline
+  ctx.font = 'bold 42px Georgia, serif';
+  ctx.fillStyle = '#8a6420';
+  ctx.fillText(`🎉 Happy Birthday, ${currentName}! 🎂`, 600, 135);
+
+  // Divider line
+  ctx.strokeStyle = 'rgba(201,151,58,0.5)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(100, 155); ctx.lineTo(1100, 155); ctx.stroke();
+
+  // Blessing body (wrapped)
+  ctx.font = 'italic 22px Georgia, serif';
+  ctx.fillStyle = '#2c1f0e';
+  wrapText(ctx, blessingBody.substring(0, 260) + '...', 100, 200, 1000, 34);
+
+  // Verse box
+  ctx.fillStyle = 'rgba(201,151,58,0.1)';
+  roundRect(ctx, 80, 520, 1040, 160, 16);
+  ctx.fillStyle = 'rgba(201,151,58,0.25)';
+  ctx.strokeStyle = 'rgba(201,151,58,0.5)';
+  ctx.lineWidth = 1;
+  roundRectStroke(ctx, 80, 520, 1040, 160, 16);
+
+  ctx.font = 'italic 20px Georgia, serif';
+  ctx.fillStyle = '#2c1f0e';
+  wrapText(ctx, '"' + verseText + '"', 110, 556, 980, 30);
+
+  ctx.font = '16px Georgia, serif';
+  ctx.fillStyle = '#8a6420';
+  ctx.textAlign = 'right';
+  ctx.fillText(verseRef, 1100, 668);
+
+  // Footer
+  ctx.textAlign = 'center';
+  ctx.font = '14px Georgia, serif';
+  ctx.fillStyle = '#5a4228';
+  ctx.globalAlpha = 0.6;
+  ctx.fillText('Generated with love • Christian Birthday Blessing', 600, 766);
+  ctx.globalAlpha = 1;
+
+  const link = document.createElement('a');
+  link.download = `birthday-blessing-${currentName.replace(/\s+/g, '-').toLowerCase()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  showToast('Birthday card downloaded! 🎉');
+}
+
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  const words = text.split(' ');
+  let line = '';
+  let cy = y;
+  for (let i = 0; i < words.length; i++) {
+    const test = line + words[i] + ' ';
+    if (ctx.measureText(test).width > maxW && i > 0) {
+      ctx.fillText(line, x, cy);
+      line = words[i] + ' ';
+      cy += lineH;
+      if (cy > 490) break;
+    } else { line = test; }
+  }
+  ctx.fillText(line, x, cy);
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+  ctx.fill();
+}
+function roundRectStroke(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+  ctx.stroke();
+}
+
+// ── Theme ─────────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+  document.getElementById('theme-label').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Enter key ─────────────────────────────────────────────────────────────────
+document.getElementById('name-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') generateBlessing();
+});
+
+// ── Confetti ──────────────────────────────────────────────────────────────────
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#c9973a','#e8c46a','#7b2d42','#4a7c59','#3a6b8a','#c9697a','#f5e8d0','#fff'];
+  const shapes = ['circle','square','star'];
+  const particles = Array.from({ length: 140 }, () => ({
+    x: Math.random() * canvas.width,
+    y: -20,
+    size: 5 + Math.random() * 8,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    shape: shapes[Math.floor(Math.random() * shapes.length)],
+    vx: (Math.random() - 0.5) * 4,
+    vy: 2 + Math.random() * 5,
+    rot: Math.random() * Math.PI * 2,
+    rotV: (Math.random() - 0.5) * 0.2,
+    alpha: 1,
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.06;
+      p.rot += p.rotV;
+      if (frame > 90) p.alpha -= 0.012;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      if (p.shape === 'circle') {
+        ctx.beginPath(); ctx.arc(0, 0, p.size/2, 0, Math.PI*2); ctx.fill();
+      } else if (p.shape === 'square') {
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+      } else {
+        drawStar(ctx, 0, 0, 5, p.size/2, p.size/4);
+      }
+      ctx.restore();
+    });
+    frame++;
+    if (frame < 200) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+function drawStar(ctx, cx, cy, spikes, outer, inner) {
+  let rot = (Math.PI / 2) * 3;
+  const step = Math.PI / spikes;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - outer);
+  for (let i = 0; i < spikes; i++) {
+    ctx.lineTo(cx + Math.cos(rot) * outer, cy + Math.sin(rot) * outer);
+    rot += step;
+    ctx.lineTo(cx + Math.cos(rot) * inner, cy + Math.sin(rot) * inner);
+    rot += step;
+  }
+  ctx.lineTo(cx, cy - outer);
+  ctx.closePath();
+  ctx.fill();
+}
+
+// ── Background canvas (subtle cross pattern) ──────────────────────────────────
+(function drawBg() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; render(); }
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const theme = document.documentElement.getAttribute('data-theme');
+    ctx.strokeStyle = theme === 'dark' ? 'rgba(201,151,58,0.07)' : 'rgba(201,151,58,0.12)';
+    ctx.lineWidth = 0.8;
+    const spacing = 80;
+    for (let x = 0; x < canvas.width; x += spacing) {
+      for (let y = 0; y < canvas.height; y += spacing) {
+        ctx.beginPath();
+        ctx.moveTo(x + spacing/2 - 6, y + spacing/2);
+        ctx.lineTo(x + spacing/2 + 6, y + spacing/2);
+        ctx.moveTo(x + spacing/2, y + spacing/2 - 8);
+        ctx.lineTo(x + spacing/2, y + spacing/2 + 8);
+        ctx.stroke();
+      }
+    }
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  // Re-render on theme change
+  const observer = new MutationObserver(render);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+
+// ── Floating balloons ─────────────────────────────────────────────────────────
+(function spawnBalloons() {
+  const layer = document.getElementById('balloons-layer');
+  const emojis = ['🎈','🎈','🎉','🎊','🎈','🕊','⭐','🌟','✨'];
+  let count = 0;
+  function spawn() {
+    if (count > 18) return;
+    const el = document.createElement('div');
+    el.className = 'balloon';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 98 + '%';
+    el.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+    const dur = 12 + Math.random() * 16;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = (Math.random() * 6) + 's';
+    layer.appendChild(el);
+    count++;
+    el.addEventListener('animationend', () => { el.remove(); count--; setTimeout(spawn, 1000 + Math.random()*3000); });
+  }
+  for (let i = 0; i < 8; i++) setTimeout(spawn, i * 800);
+})();
+</script>
+</body>
+</html>
