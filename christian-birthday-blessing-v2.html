@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Birthday Blessing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── CSS Variables ─────────────────────────────── */
+:root {
+  --gold:       #b8942a;
+  --gold-l:     #d4af60;
+  --gold-xl:    #f0dfa0;
+  --gold-s:     #8a6d1a;
+  --ivory:      #fdf9f0;
+  --parch:      #f5edda;
+  --cream:      #fffdf7;
+  --navy:       #1a2240;
+  --ink:        #23200f;
+  --muted:      #7a6a45;
+  --border:     #e0d4b8;
+  --card-bg:    #ffffff;
+  --input-bg:   #fefcf5;
+  --shadow:     0 8px 40px rgba(90,60,10,0.10), 0 2px 8px rgba(184,148,42,0.10);
+  --shadow-lg:  0 20px 60px rgba(90,60,10,0.14), 0 4px 16px rgba(184,148,42,0.13);
+  --body-bg:    var(--ivory);
+  --text:       var(--ink);
+  --text-m:     var(--muted);
+  --divider:    var(--border);
+  --topbar-bg:  rgba(253,249,240,0.90);
+  --verse-bg:   linear-gradient(135deg,rgba(184,148,42,0.07),rgba(212,175,96,0.04));
+  --verse-bdr:  rgba(184,148,42,0.28);
+}
+[data-theme="dark"] {
+  --gold:       #c9a84c;
+  --gold-l:     #dfc07a;
+  --gold-xl:    #f0dfa0;
+  --gold-s:     #9a7a2e;
+  --ivory:      #12100a;
+  --parch:      #1c190e;
+  --cream:      #0e0c07;
+  --navy:       #c5d0f0;
+  --ink:        #f0e8d0;
+  --muted:      #a08c65;
+  --border:     #3a3018;
+  --card-bg:    #1c190e;
+  --input-bg:   #252010;
+  --shadow:     0 8px 40px rgba(0,0,0,0.45), 0 2px 8px rgba(201,168,76,0.10);
+  --shadow-lg:  0 20px 60px rgba(0,0,0,0.55), 0 4px 16px rgba(201,168,76,0.12);
+  --body-bg:    #12100a;
+  --text:       #f0e8d0;
+  --text-m:     #a08c65;
+  --divider:    #3a3018;
+  --topbar-bg:  rgba(18,16,10,0.92);
+  --verse-bg:   linear-gradient(135deg,rgba(201,168,76,0.09),rgba(201,168,76,0.03));
+  --verse-bdr:  rgba(201,168,76,0.28);
+}
+
+/* ── Reset & Base ──────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Raleway',sans-serif;
+  background:var(--body-bg);
+  color:var(--text);
+  min-height:100vh;
+  transition:background .4s,color .4s;
+  overflow-x:hidden;
+}
+
+/* ── Background ambient layer ──────────────────── */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.amb-orb{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,var(--gold-xl) 0%,transparent 70%);
+  opacity:0;
+  animation:orbFloat var(--d) ease-in-out infinite alternate;
+}
+[data-theme="dark"] .amb-orb{opacity:0.06;}
+[data-theme="light"] .amb-orb{opacity:0.25;}
+@keyframes orbFloat{
+  from{transform:translate(0,0) scale(1);}
+  to{transform:translate(var(--tx),var(--ty)) scale(1.12);}
+}
+.cross-bg{
+  position:absolute;
+  font-size:var(--fs);color:var(--gold);
+  opacity:0;pointer-events:none;user-select:none;
+  animation:crossDrift var(--d) ease-in-out infinite alternate;
+}
+[data-theme="dark"] .cross-bg{opacity:0.055;}
+[data-theme="light"] .cross-bg{opacity:0.04;}
+@keyframes crossDrift{
+  from{transform:rotate(var(--r0));}
+  to{transform:rotate(var(--r1)) translateY(12px);}
+}
+
+/* ── Topbar ────────────────────────────────────── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 28px;
+  background:var(--topbar-bg);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--divider);
+  transition:background .4s,border-color .4s;
+}
+.brand{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;font-weight:600;
+  color:var(--gold);
+  display:flex;align-items:center;gap:9px;
+  letter-spacing:.04em;
+}
+.brand-sym{font-size:1.4rem;line-height:1;}
+.theme-toggle{
+  background:none;
+  border:1.5px solid var(--divider);
+  border-radius:30px;padding:7px 17px;
+  font-family:'Raleway',sans-serif;
+  font-size:.78rem;font-weight:700;letter-spacing:.05em;
+  color:var(--text-m);cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  transition:border-color .2s,color .2s;
+}
+.theme-toggle:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── Main wrapper ──────────────────────────────── */
+.page{
+  position:relative;z-index:10;
+  min-height:100vh;
+  padding:96px 18px 70px;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+/* ── Hero ──────────────────────────────────────── */
+.hero{
+  text-align:center;max-width:620px;
+  margin-bottom:40px;
+}
+.hero-cake{
+  display:block;font-size:3.4rem;
+  animation:cakeFloat 3.2s ease-in-out infinite;
+  margin-bottom:4px;
+}
+@keyframes cakeFloat{
+  0%,100%{transform:translateY(0) rotate(-4deg);}
+  50%{transform:translateY(-11px) rotate(4deg);}
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.75rem,5.5vw,3rem);
+  font-weight:700;
+  background:linear-gradient(135deg,var(--gold-s),var(--gold),var(--gold-l),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 2px 12px rgba(184,148,42,.22));
+  line-height:1.18;margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.hero-verse{
+  font-family:'EB Garamond',serif;
+  font-style:italic;font-size:clamp(.95rem,2.3vw,1.15rem);
+  color:var(--text-m);font-weight:400;
+  line-height:1.65;margin-bottom:6px;
+}
+.hero-ref{
+  font-family:'Raleway',sans-serif;
+  font-size:.75rem;font-weight:700;
+  letter-spacing:.1em;color:var(--gold);
+  text-transform:uppercase;
+}
+.rule{
+  display:flex;align-items:center;gap:14px;
+  max-width:340px;margin:18px auto 0;
+  color:var(--gold);opacity:.5;font-size:.8rem;
+}
+.rule::before,.rule::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+/* ── Input Card ────────────────────────────────── */
+.input-card{
+  background:var(--card-bg);
+  border:1px solid var(--divider);
+  border-radius:22px;
+  padding:36px 38px 34px;
+  width:100%;max-width:560px;
+  box-shadow:var(--shadow);
+  margin-bottom:30px;
+  position:relative;overflow:hidden;
+  transition:background .4s,border-color .4s,box-shadow .4s;
+}
+.input-card::after{
+  content:'✝';position:absolute;
+  bottom:-20px;right:-8px;
+  font-size:130px;color:var(--gold);
+  opacity:0.035;pointer-events:none;line-height:1;
+}
+.field-label{
+  display:block;
+  font-family:'Raleway',sans-serif;
+  font-size:.68rem;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-m);margin-bottom:9px;
+}
+.name-input{
+  width:100%;
+  padding:14px 18px;
+  border:1.5px solid var(--divider);
+  border-radius:12px;
+  font-family:'EB Garamond',serif;
+  font-size:1.28rem;
+  color:var(--text);
+  background:var(--input-bg);
+  outline:none;
+  transition:border-color .3s,box-shadow .3s,background .4s;
+  margin-bottom:18px;
+}
+.name-input::placeholder{color:var(--text-m);opacity:.55;}
+.name-input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,148,42,.15);
+}
+.name-input.shake{animation:shake .4s ease;}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-8px);}
+  40%{transform:translateX(8px);}
+  60%{transform:translateX(-5px);}
+  80%{transform:translateX(5px);}
+}
+.btn-gen{
+  width:100%;padding:15px 20px;
+  background:linear-gradient(135deg,var(--gold-s) 0%,var(--gold) 40%,var(--gold-l) 70%,var(--gold) 100%);
+  background-size:220% 220%;
+  animation:shimmer 5s ease infinite;
+  border:none;border-radius:12px;
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;font-weight:600;
+  letter-spacing:.06em;
+  color:#1a1200;
+  cursor:pointer;
+  box-shadow:0 6px 28px rgba(184,148,42,.38);
+  transition:transform .2s,box-shadow .2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+@keyframes shimmer{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+.btn-gen:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(184,148,42,.52);}
+.btn-gen:active{transform:scale(.98);}
+
+/* ── Blessing card ─────────────────────────────── */
+.blessing-card{
+  background:var(--card-bg);
+  border:1px solid var(--divider);
+  border-radius:26px;
+  padding:46px 46px 38px;
+  width:100%;max-width:680px;
+  box-shadow:var(--shadow-lg);
+  display:none;
+  opacity:0;transform:translateY(28px) scale(.98);
+  transition:opacity .65s cubic-bezier(.34,1.3,.64,1),
+              transform .65s cubic-bezier(.34,1.3,.64,1),
+              background .4s,border-color .4s;
+  position:relative;overflow:hidden;
+}
+.blessing-card.open{display:block;}
+.blessing-card.shown{opacity:1;transform:translateY(0) scale(1);}
+
+/* corner flourishes */
+.flourish{
+  position:absolute;
+  font-size:52px;color:var(--gold);
+  opacity:0.08;pointer-events:none;line-height:1;
+}
+.fl-tl{top:12px;left:16px;}
+.fl-tr{top:12px;right:16px;transform:scaleX(-1);}
+.fl-bl{bottom:12px;left:16px;transform:scaleY(-1);}
+.fl-br{bottom:12px;right:16px;transform:scale(-1,-1);}
+
+/* candle row */
+.candle-row{
+  display:flex;justify-content:center;gap:10px;
+  margin-bottom:18px;
+}
+.candle-w{display:flex;flex-direction:column;align-items:center;}
+.flame{
+  width:9px;height:14px;
+  background:radial-gradient(ellipse at 50% 70%,#ffe566,#f97316 55%,transparent);
+  border-radius:50% 50% 30% 30%;
+  animation:flicker var(--fs,0.6s) ease-in-out infinite alternate;
+  margin-bottom:0;
+}
+@keyframes flicker{
+  from{transform:scale(1,1) rotate(-3deg);opacity:.9;}
+  to{transform:scale(.82,1.12) rotate(3deg);opacity:1;}
+}
+.candle-b{
+  width:10px;height:26px;
+  border-radius:3px 3px 1px 1px;
+  background:var(--cc);
+}
+.candle-base{
+  width:14px;height:4px;
+  border-radius:2px;
+  background:rgba(120,100,60,.22);
+}
+/* wax drip */
+.candle-b::after{
+  content:'';display:block;
+  width:5px;height:6px;
+  border-radius:0 0 4px 4px;
+  background:var(--cc);
+  opacity:.6;margin-left:1px;margin-top:-1px;
+}
+
+/* title */
+.b-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.4rem,4.5vw,2.05rem);
+  font-weight:700;
+  color:var(--gold);
+  text-align:center;
+  margin-bottom:22px;
+  line-height:1.25;
+  letter-spacing:.02em;
+  text-shadow:0 2px 20px rgba(184,148,42,.18);
+}
+.ornament-line{
+  display:flex;align-items:center;gap:14px;
+  color:var(--gold);font-size:1rem;
+  margin:18px 0;opacity:.55;
+}
+.ornament-line::before,.ornament-line::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+/* blessing body */
+.b-body{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(1.1rem,2.4vw,1.32rem);
+  font-weight:400;line-height:1.88;
+  color:var(--text);text-align:center;
+  margin-bottom:24px;
+}
+.b-name{
+  font-weight:600;font-style:italic;
+  color:var(--gold);
+}
+
+/* verse block */
+.verse-block{
+  background:var(--verse-bg);
+  border:1px solid var(--verse-bdr);
+  border-left:4px solid var(--gold);
+  border-radius:0 14px 14px 0;
+  padding:20px 24px;
+  margin:20px 0 26px;
+}
+.verse-eyebrow{
+  font-family:'Raleway',sans-serif;
+  font-size:.63rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:9px;
+  display:flex;align-items:center;gap:8px;
+}
+.verse-text{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(1.05rem,2.2vw,1.22rem);
+  font-style:italic;font-weight:400;
+  color:var(--text);line-height:1.72;
+  margin-bottom:10px;
+}
+.verse-ref{
+  font-family:'Raleway',sans-serif;
+  font-size:.76rem;font-weight:700;
+  letter-spacing:.07em;color:var(--gold);
+}
+
+/* closing */
+.b-closing{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(1rem,2vw,1.12rem);
+  font-style:italic;
+  color:var(--text-m);text-align:center;
+  line-height:1.72;margin-top:14px;
+}
+
+/* action row */
+.actions{
+  display:flex;flex-wrap:wrap;gap:11px;
+  margin-top:28px;justify-content:center;
+}
+.btn-act{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 19px;
+  border:1.5px solid var(--divider);
+  border-radius:10px;
+  background:transparent;
+  color:var(--text-m);
+  font-family:'Raleway',sans-serif;
+  font-size:.82rem;font-weight:700;
+  letter-spacing:.03em;
+  cursor:pointer;
+  transition:border-color .2s,color .2s,background .2s,transform .15s;
+}
+.btn-act:hover{
+  border-color:var(--gold);color:var(--gold);
+  background:rgba(184,148,42,.07);
+  transform:translateY(-1px);
+}
+.btn-act svg{width:15px;height:15px;flex-shrink:0;}
+.btn-act.primary{
+  border-color:var(--gold);color:var(--gold);
+  background:rgba(184,148,42,.08);
+}
+.btn-act.primary:hover{background:rgba(184,148,42,.18);}
+
+/* ── Balloons ──────────────────────────────────── */
+.balloons{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden;}
+.bal{
+  position:absolute;bottom:-130px;
+  display:flex;flex-direction:column;align-items:center;
+  animation:balRise var(--dur) ease-in infinite;
+  animation-delay:var(--del);opacity:0;
+}
+.bal-b{
+  width:46px;height:58px;
+  border-radius:50% 50% 46% 46%;
+  background:var(--bc);
+  box-shadow:inset -7px -9px 16px rgba(0,0,0,.18),
+             inset 3px 3px 10px rgba(255,255,255,.22);
+  position:relative;
+}
+.bal-b::after{
+  content:'';position:absolute;
+  bottom:-6px;left:50%;transform:translateX(-50%);
+  width:7px;height:7px;
+  border-radius:50% 50% 50% 50%/0 0 100% 100%;
+  background:var(--bc);
+}
+.bal-s{width:1px;height:56px;background:rgba(160,140,100,.35);}
+@keyframes balRise{
+  0%{bottom:-130px;opacity:0;transform:translateX(0);}
+  4%{opacity:.75;}
+  50%{transform:translateX(var(--sw));}
+  95%{opacity:.55;}
+  100%{bottom:108vh;opacity:0;transform:translateX(calc(var(--sw)*-.6));}
+}
+
+/* ── Confetti canvas ───────────────────────────── */
+#conf{position:fixed;inset:0;pointer-events:none;z-index:300;}
+
+/* ── Toast ─────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(10px);
+  background:var(--gold);color:#1a1200;
+  padding:11px 26px;border-radius:50px;
+  font-family:'Raleway',sans-serif;
+  font-size:.83rem;font-weight:700;letter-spacing:.04em;
+  opacity:0;transition:opacity .3s,transform .3s;
+  z-index:400;pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── Responsive ────────────────────────────────── */
+@media(max-width:560px){
+  .input-card,.blessing-card{padding:26px 20px 22px;}
+  .actions{gap:8px;}
+  .btn-act{padding:9px 13px;font-size:.76rem;}
+  .topbar{padding:12px 16px;}
+}
+</style>
+</head>
+<body>
+<canvas id="conf"></canvas>
+
+<!-- Ambient background -->
+<div class="ambient" id="ambient"></div>
+<!-- Balloons -->
+<div class="balloons" id="balloons"></div>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-sym">✝</span>
+    <span>Birthday Blessings</span>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+    <span id="themeIco">🌙</span>
+    <span id="themeTxt">Dark Mode</span>
+  </button>
+</header>
+
+<!-- Page -->
+<main class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="hero-cake">🎂</span>
+    <h1 class="hero-title">Christian Birthday Blessing</h1>
+    <p class="hero-verse">"The Lord bless you and keep you; the Lord make His face shine on you and be gracious to you."</p>
+    <p class="hero-ref">Numbers 6:24–25</p>
+    <div class="rule">✦</div>
+  </div>
+
+  <!-- Input card -->
+  <div class="input-card">
+    <label class="field-label" for="nameInput">✦ Birthday Person's Name</label>
+    <input id="nameInput" class="name-input" type="text"
+           placeholder="Enter their name…" maxlength="60" autocomplete="off"
+           onkeydown="if(event.key==='Enter')generate()">
+    <button class="btn-gen" onclick="generate()">
+      <span>✝</span>
+      <span>Generate Birthday Blessing</span>
+      <span>🎉</span>
+    </button>
+  </div>
+
+  <!-- Blessing output -->
+  <div class="blessing-card" id="card">
+    <div class="flourish fl-tl">❧</div>
+    <div class="flourish fl-tr">❧</div>
+    <div class="flourish fl-bl">❧</div>
+    <div class="flourish fl-br">❧</div>
+
+    <div class="candle-row" id="candles"></div>
+    <div class="b-title" id="bTitle"></div>
+    <div class="ornament-line">✦ ✝ ✦</div>
+    <div class="b-body" id="bBody"></div>
+    <div class="verse-block">
+      <div class="verse-eyebrow">📖 Scripture</div>
+      <div class="verse-text" id="vText"></div>
+      <div class="verse-ref" id="vRef"></div>
+    </div>
+    <div class="b-closing" id="bClosing"></div>
+    <div class="actions">
+      <button class="btn-act" onclick="copyCard()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy
+      </button>
+      <button class="btn-act" onclick="shareCard()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="btn-act" onclick="downloadCard()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </button>
+      <button class="btn-act primary" onclick="generate()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        New Blessing
+      </button>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════════════
+   BIBLE VERSE DATABASE — 120 birthday-appropriate verses
+   Only: blessing, joy, love, hope, faith, wisdom,
+         gratitude, purpose, growth, protection, peace,
+         God's promises, new beginnings, identity in God.
+   EXCLUDED: war, judgment, punishment, prophecy of doom,
+             suffering, lament.
+   ════════════════════════════════════════════════════ */
+const VERSES = [
+  // ── Blessing & Favor ──────────────────────────
+  {t:"The Lord bless you and keep you; the Lord make His face shine on you and be gracious to you; the Lord turn His face toward you and give you peace.",r:"Numbers 6:24–26"},
+  {t:"From the fullness of His grace we have all received one blessing after another.",r:"John 1:16"},
+  {t:"Blessed is the one who trusts in the Lord, whose confidence is in Him.",r:"Jeremiah 17:7"},
+  {t:"Every good and perfect gift is from above, coming down from the Father of the heavenly lights, who does not change like shifting shadows.",r:"James 1:17"},
+  {t:"How abundant are the good things that You have stored up for those who fear You.",r:"Psalm 31:19"},
+  {t:"Taste and see that the Lord is good; blessed is the one who takes refuge in Him.",r:"Psalm 34:8"},
+  {t:"The Lord had blessed him in everything he did.",r:"Genesis 24:1"},
+  {t:"You will be blessed when you come in and blessed when you go out.",r:"Deuteronomy 28:6"},
+  {t:"May the Lord cause you to flourish, both you and your children.",r:"Psalm 115:14"},
+  {t:"Blessed are those whose ways are blameless, who walk according to the law of the Lord.",r:"Psalm 119:1"},
+  {t:"The Lord will open the heavens, the storehouse of His bounty, and bless all the work of your hands.",r:"Deuteronomy 28:12"},
+  {t:"For the Lord God is a sun and shield; the Lord bestows favor and honor; no good thing does He withhold from those whose walk is blameless.",r:"Psalm 84:11"},
+  {t:"May God give you heaven's dew and earth's richness — an abundance of grain and new wine.",r:"Genesis 27:28"},
+  {t:"The Lord your God will bless you in all your harvest and in all the work of your hands.",r:"Deuteronomy 16:15"},
+  {t:"The Lord will fulfill His purpose for me; Your steadfast love, O Lord, endures forever.",r:"Psalm 138:8"},
+
+  // ── Joy & Celebration ─────────────────────────
+  {t:"This is the day the Lord has made; let us rejoice and be glad in it.",r:"Psalm 118:24"},
+  {t:"May the God of hope fill you with all joy and peace as you trust in Him, so that you may overflow with hope by the power of the Holy Spirit.",r:"Romans 15:13"},
+  {t:"Rejoice in the Lord always. I will say it again: Rejoice!",r:"Philippians 4:4"},
+  {t:"The joy of the Lord is your strength.",r:"Nehemiah 8:10"},
+  {t:"You make known to me the path of life; You will fill me with joy in Your presence, with eternal pleasures at Your right hand.",r:"Psalm 16:11"},
+  {t:"A joyful heart is good medicine.",r:"Proverbs 17:22"},
+  {t:"Shout for joy to the Lord, all the earth. Worship the Lord with gladness; come before Him with joyful songs.",r:"Psalm 100:1–2"},
+  {t:"The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you; in His love He will no longer rebuke you, but will rejoice over you with singing.",r:"Zephaniah 3:17"},
+  {t:"I have told you this so that My joy may be in you and that your joy may be complete.",r:"John 15:11"},
+  {t:"Ask and you will receive, and your joy will be complete.",r:"John 16:24"},
+  {t:"Those who sow with tears will reap with songs of joy.",r:"Psalm 126:5"},
+  {t:"You will go out in joy and be led forth in peace.",r:"Isaiah 55:12"},
+  {t:"The ransomed of the Lord will return. They will enter Zion with singing; everlasting joy will crown their heads.",r:"Isaiah 35:10"},
+  {t:"You have put more joy in my heart than they have when their grain and wine abound.",r:"Psalm 4:7"},
+
+  // ── Love & Grace ──────────────────────────────
+  {t:"For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life.",r:"John 3:16"},
+  {t:"And now these three remain: faith, hope and love. But the greatest of these is love.",r:"1 Corinthians 13:13"},
+  {t:"We love because He first loved us.",r:"1 John 4:19"},
+  {t:"The Lord appeared to us in the past, saying: I have loved you with an everlasting love; I have drawn you with unfailing kindness.",r:"Jeremiah 31:3"},
+  {t:"How priceless is Your unfailing love, O God! People take refuge in the shadow of Your wings.",r:"Psalm 36:7"},
+  {t:"Give thanks to the Lord, for He is good; His love endures forever.",r:"Psalm 107:1"},
+  {t:"Dear friends, let us love one another, for love comes from God.",r:"1 John 4:7"},
+  {t:"May the Lord make your love increase and overflow for each other and for everyone else.",r:"1 Thessalonians 3:12"},
+  {t:"See what great love the Father has lavished on us, that we should be called children of God!",r:"1 John 3:1"},
+  {t:"Nothing in all creation will be able to separate us from the love of God that is in Christ Jesus our Lord.",r:"Romans 8:39"},
+  {t:"The Lord is gracious and righteous; our God is full of compassion.",r:"Psalm 116:5"},
+  {t:"But He said to me, My grace is sufficient for you, for My power is made perfect in weakness.",r:"2 Corinthians 12:9"},
+  {t:"Grace and peace to you from God our Father and from the Lord Jesus Christ.",r:"Romans 1:7"},
+  {t:"May grace and peace be yours in abundance through the knowledge of God and of Jesus our Lord.",r:"2 Peter 1:2"},
+
+  // ── Strength & Courage ────────────────────────
+  {t:"I can do all this through Him who gives me strength.",r:"Philippians 4:13"},
+  {t:"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",r:"Joshua 1:9"},
+  {t:"The Lord is my strength and my shield; my heart trusts in Him, and He helps me.",r:"Psalm 28:7"},
+  {t:"He gives strength to the weary and increases the power of the weak.",r:"Isaiah 40:29"},
+  {t:"Those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary.",r:"Isaiah 40:31"},
+  {t:"Be strong in the Lord and in His mighty power.",r:"Ephesians 6:10"},
+  {t:"God is our refuge and strength, an ever-present help in trouble.",r:"Psalm 46:1"},
+  {t:"For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.",r:"2 Timothy 1:7"},
+  {t:"My flesh and my heart may fail, but God is the strength of my heart and my portion forever.",r:"Psalm 73:26"},
+  {t:"Fear not, for I am with you; be not dismayed, for I am your God; I will strengthen you, I will help you.",r:"Isaiah 41:10"},
+
+  // ── Peace ─────────────────────────────────────
+  {t:"Peace I leave with you; My peace I give you. I do not give to you as the world gives.",r:"John 14:27"},
+  {t:"You will keep in perfect peace those whose minds are steadfast, because they trust in You.",r:"Isaiah 26:3"},
+  {t:"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts.",r:"Philippians 4:6–7"},
+  {t:"Let the peace of Christ rule in your hearts, since as members of one body you were called to peace.",r:"Colossians 3:15"},
+  {t:"Come to Me, all you who are weary and burdened, and I will give you rest.",r:"Matthew 11:28"},
+  {t:"May the Lord of peace Himself give you peace at all times and in every way.",r:"2 Thessalonians 3:16"},
+  {t:"In peace I will lie down and sleep, for You alone, Lord, make me dwell in safety.",r:"Psalm 4:8"},
+  {t:"The Lord gives strength to His people; the Lord blesses His people with peace.",r:"Psalm 29:11"},
+
+  // ── Hope & Faith ──────────────────────────────
+  {t:"For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.",r:"Jeremiah 29:11"},
+  {t:"Now faith is confidence in what we hope for and assurance about what we do not see.",r:"Hebrews 11:1"},
+  {t:"Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight.",r:"Proverbs 3:5–6"},
+  {t:"For nothing will be impossible with God.",r:"Luke 1:37"},
+  {t:"We know that in all things God works for the good of those who love Him, who have been called according to His purpose.",r:"Romans 8:28"},
+  {t:"Being confident of this, that He who began a good work in you will carry it on to completion until the day of Christ Jesus.",r:"Philippians 1:6"},
+  {t:"Let us hold unswervingly to the hope we profess, for He who promised is faithful.",r:"Hebrews 10:23"},
+  {t:"Blessed is the one who perseveres under trial because, having stood the test, that person will receive the crown of life.",r:"James 1:12"},
+  {t:"And we know that God causes everything to work together for the good of those who love God.",r:"Romans 8:28"},
+  {t:"For our light and momentary troubles are achieving for us an eternal glory that far outweighs them all.",r:"2 Corinthians 4:17"},
+
+  // ── Wisdom & Guidance ────────────────────────
+  {t:"If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.",r:"James 1:5"},
+  {t:"Your word is a lamp for my feet, a light on my path.",r:"Psalm 119:105"},
+  {t:"I will instruct you and teach you in the way you should go; I will counsel you with My loving eye on you.",r:"Psalm 32:8"},
+  {t:"Commit to the Lord whatever you do, and He will establish your plans.",r:"Proverbs 16:3"},
+  {t:"Whether you turn to the right or to the left, your ears will hear a voice behind you, saying, This is the way; walk in it.",r:"Isaiah 30:21"},
+  {t:"The Lord gives wisdom; from His mouth come knowledge and understanding.",r:"Proverbs 2:6"},
+  {t:"Show me Your ways, Lord, teach me Your paths.",r:"Psalm 25:4"},
+  {t:"In all your ways acknowledge Him, and He will make your paths straight.",r:"Proverbs 3:6"},
+  {t:"The fear of the Lord is the beginning of wisdom; all who follow His precepts have good understanding.",r:"Psalm 111:10"},
+
+  // ── Gratitude & Praise ────────────────────────
+  {t:"Give thanks to the Lord, for He is good; His love endures forever.",r:"Psalm 136:1"},
+  {t:"Enter His gates with thanksgiving and His courts with praise; give thanks to Him and praise His name.",r:"Psalm 100:4"},
+  {t:"Give thanks in all circumstances; for this is God's will for you in Christ Jesus.",r:"1 Thessalonians 5:18"},
+  {t:"I will give thanks to You, Lord, with all my heart; I will tell of all Your wonderful deeds.",r:"Psalm 9:1"},
+  {t:"Praise the Lord, my soul; all my inmost being, praise His holy name.",r:"Psalm 103:1"},
+  {t:"I thank my God every time I remember you.",r:"Philippians 1:3"},
+  {t:"Let everything that has breath praise the Lord.",r:"Psalm 150:6"},
+  {t:"Bless the Lord, O my soul, and forget not all His benefits.",r:"Psalm 103:2"},
+
+  // ── Protection & Refuge ───────────────────────
+  {t:"The Lord is my shepherd; I shall not want.",r:"Psalm 23:1"},
+  {t:"Even though I walk through the darkest valley, I will fear no evil, for You are with me; Your rod and Your staff, they comfort me.",r:"Psalm 23:4"},
+  {t:"He who dwells in the shelter of the Most High will rest in the shadow of the Almighty.",r:"Psalm 91:1"},
+  {t:"For He will command His angels concerning you to guard you in all your ways.",r:"Psalm 91:11"},
+  {t:"The Lord will keep you from all harm — He will watch over your life.",r:"Psalm 121:7"},
+  {t:"My help comes from the Lord, the Maker of heaven and earth.",r:"Psalm 121:2"},
+  {t:"No weapon forged against you will prevail.",r:"Isaiah 54:17"},
+  {t:"The name of the Lord is a fortified tower; the righteous run to it and are safe.",r:"Proverbs 18:10"},
+  {t:"As the mountains surround Jerusalem, so the Lord surrounds His people both now and forevermore.",r:"Psalm 125:2"},
+  {t:"Surely Your goodness and love will follow me all the days of my life, and I will dwell in the house of the Lord forever.",r:"Psalm 23:6"},
+
+  // ── Purpose & Identity ────────────────────────
+  {t:"Before I formed you in the womb I knew you, before you were born I set you apart.",r:"Jeremiah 1:5"},
+  {t:"For You created my inmost being; You knit me together in my mother's womb. I praise You because I am fearfully and wonderfully made.",r:"Psalm 139:13–14"},
+  {t:"I came that they may have life and have it abundantly.",r:"John 10:10"},
+  {t:"Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!",r:"2 Corinthians 5:17"},
+  {t:"Yet to all who did receive Him, to those who believed in His name, He gave the right to become children of God.",r:"John 1:12"},
+  {t:"Now to Him who is able to do immeasurably more than all we ask or imagine, according to His power that is at work within us.",r:"Ephesians 3:20"},
+  {t:"But seek first His kingdom and His righteousness, and all these things will be given to you as well.",r:"Matthew 6:33"},
+  {t:"I pray that you may enjoy good health and that all may go well with you, even as your soul is getting along well.",r:"3 John 1:2"},
+  {t:"You are the light of the world. A town built on a hill cannot be hidden.",r:"Matthew 5:14"},
+  {t:"For we are God's handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.",r:"Ephesians 2:10"},
+
+  // ── Growth & Renewal ─────────────────────────
+  {t:"Do not conform to the pattern of this world, but be transformed by the renewing of your mind.",r:"Romans 12:2"},
+  {t:"Grow in the grace and knowledge of our Lord and Savior Jesus Christ.",r:"2 Peter 3:18"},
+  {t:"But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.",r:"Galatians 5:22–23"},
+  {t:"See, I am doing a new thing! Now it springs up; do you not perceive it? I am making a way in the wilderness and streams in the wasteland.",r:"Isaiah 43:19"},
+  {t:"The Lord will guide you always; He will satisfy your needs in a sun-scorched land and will strengthen your frame.",r:"Isaiah 58:11"},
+  {t:"Arise, shine, for your light has come, and the glory of the Lord rises upon you.",r:"Isaiah 60:1"},
+  {t:"Create in me a pure heart, O God, and renew a steadfast spirit within me.",r:"Psalm 51:10"},
+  {t:"And we all, who with unveiled faces contemplate the Lord's glory, are being transformed into His image with ever-increasing glory.",r:"2 Corinthians 3:18"},
+  {t:"Do not be overcome by evil, but overcome evil with good.",r:"Romans 12:21"},
+  {t:"The Lord makes firm the steps of the one who delights in Him.",r:"Psalm 37:23"},
+
+  // ── New Beginnings & Promises ────────────────
+  {t:"The steadfast love of the Lord never ceases; His mercies never come to an end; they are new every morning.",r:"Lamentations 3:22–23"},
+  {t:"Delight yourself in the Lord, and He will give you the desires of your heart.",r:"Psalm 37:4"},
+  {t:"Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.",r:"Matthew 7:7"},
+  {t:"The Lord is near to all who call on Him, to all who call on Him in truth.",r:"Psalm 145:18"},
+  {t:"I will never leave you nor forsake you.",r:"Hebrews 13:5"},
+  {t:"Do not fear, for I have redeemed you; I have summoned you by name; you are Mine.",r:"Isaiah 43:1"},
+  {t:"I praise You because I am fearfully and wonderfully made; Your works are wonderful, I know that full well.",r:"Psalm 139:14"},
+  {t:"Call to Me and I will answer you and tell you great and unsearchable things you do not know.",r:"Jeremiah 33:3"},
+  {t:"The Lord will fulfill His purpose for me; Your steadfast love, O Lord, endures forever.",r:"Psalm 138:8"},
+  {t:"He heals the brokenhearted and binds up their wounds.",r:"Psalm 147:3"},
+
+  // ── Long Life & Flourishing ───────────────────
+  {t:"With long life I will satisfy him and show him My salvation.",r:"Psalm 91:16"},
+  {t:"Whoever pursues righteousness and love finds life, prosperity and honor.",r:"Proverbs 21:21"},
+  {t:"A generous person will prosper; whoever refreshes others will be refreshed.",r:"Proverbs 11:25"},
+  {t:"She is clothed with strength and dignity; she can laugh at the days to come.",r:"Proverbs 31:25"},
+  {t:"Gray hair is a crown of splendor; it is attained in the way of righteousness.",r:"Proverbs 16:31"},
+  {t:"Blessed are all who fear the Lord, who walk in obedience to Him.",r:"Psalm 128:1"},
+  {t:"Unless the Lord builds the house, the builders labor in vain.",r:"Psalm 127:1"},
+  {t:"May you live to see your children's children — peace be on Israel.",r:"Psalm 128:6"},
+];
+
+/* ════════════════════════════════════════════════════
+   BLESSING TEMPLATES — 20 unique templates
+   ════════════════════════════════════════════════════ */
+const BLESSINGS = [
+  n=>`May God shower you, <span class="b-name">${n}</span>, with His richest blessings today and throughout every season of the year ahead. May each morning greet you with fresh mercies, each evening fill you with deep gratitude, and every chapter of your life overflow with His goodness, grace, and love that never fails.`,
+
+  n=>`On this beautiful day, dear <span class="b-name">${n}</span>, may the hand of the Lord rest upon you in power — opening doors no one can close, lighting every shadowed path, and placing within your heart a joy so deep the world cannot give it or take it away. You are fearfully made, deeply loved, and called for greatness in His kingdom.`,
+
+  n=>`Happy Birthday, <span class="b-name">${n}</span>! May the Lord of all creation hold you close, strengthen your faith, fill your home with laughter, and lead you into a future as bright and certain as His promises — which never fail and never fade. May this year be a testimony of His faithfulness written across your life.`,
+
+  n=>`As you celebrate this new year of life, <span class="b-name">${n}</span>, may you feel the warmth of God's presence around you like a garment of grace. May wisdom be your companion, peace your dwelling place, love your legacy, and the Lord your unshakable foundation through every season yet to come.`,
+
+  n=>`Dear <span class="b-name">${n}</span>, on your special day may the Lord renew your strength like the eagle's, guard your steps like a faithful shepherd, and multiply your days with purpose and joy. May every prayer you have whispered in the quiet be answered beyond anything you dared to imagine.`,
+
+  n=>`Blessings upon you, <span class="b-name">${n}</span>! May God's glory shine through your life this year, may His Spirit guide every decision you face, may your relationships grow deep and fruitful, and may this new chapter be your most extraordinary yet — written by the Author of life Himself.`,
+
+  n=>`<span class="b-name">${n}</span>, may this birthday mark the beginning of a season of abundant harvest — where seeds of faith long planted now bloom into joy, where prayers offered in trust return as answered blessings, and where the Lord's favor follows you like morning light from east to west.`,
+
+  n=>`Today, the Lord celebrates you, <span class="b-name">${n}</span>! He who knew you before you were formed, who counts every hair on your head, who has engraved your name on the palms of His hands — He rejoices over you with singing. Walk through this year knowing exactly how cherished and chosen you truly are.`,
+
+  n=>`May the God of all grace pour fresh anointing over you, <span class="b-name">${n}</span>, as you step into this new year. May His peace guard your mind in every storm, His strength carry you in every weakness, His love comfort you in every moment of need, and His purpose ignite your heart with holy fire for the days ahead.`,
+
+  n=>`<span class="b-name">${n}</span>, what a gift you are to those around you and to this world! May the Lord bless the work of your hands, the words of your mouth, and the intentions of your heart. May this year carry you from faith to faith and strength to strength — with Emmanuel, God-with-us, as your constant companion.`,
+
+  n=>`Happy Birthday, beloved <span class="b-name">${n}</span>! May the ancient blessing rest richly upon you — may the Lord bless you and keep you, may His face shine upon you, and may He grant you shalom: a wholeness and completeness that touches every corner of your life, your relationships, and your calling.`,
+
+  n=>`As another year dawns for you, <span class="b-name">${n}</span>, may you be clothed in joy, strengthened by faith, and surrounded by the love of those who walk beside you. May God's mercies — which are new every single morning — be yours in full measure today, and may His great faithfulness be the anthem of your entire year.`,
+
+  n=>`<span class="b-name">${n}</span>, may your birthday be a milestone of God's faithfulness in your story. As you look back, may you see His hand in every chapter. As you look forward, may you trust His plan for every page still unwritten. And in this moment, may you simply rest in how deeply you are loved.`,
+
+  n=>`On this day of celebration, <span class="b-name">${n}</span>, I pray that God grants you the spirit of wisdom and revelation to know Him more deeply, that the eyes of your heart are enlightened to see the hope He has called you to, and that His incomparable power at work within you carries you into the fullest version of your destiny.`,
+
+  n=>`<span class="b-name">${n}</span>, may the Lord release fresh purpose into your life this year — unlocking gifts you haven't yet fully unwrapped, opening relationships that will shape your journey, and aligning every step with His glorious plan. You were created for such a time as this, and your best days are still gloriously ahead.`,
+
+  n=>`Happy Birthday, <span class="b-name">${n}</span>! May you dwell in the shelter of the Most High, rest in the shadow of the Almighty, and walk in the light of His word every day of this year. May it be marked by supernatural provision, divine protection, answered prayers, and a love for the Lord that grows deeper with every sunrise.`,
+
+  n=>`<span class="b-name">${n}</span>, may every candle representing a year of your life remind you that God has been present in each one — faithful, patient, and overflowing with love. May the light of Christ shine brighter through you this year than ever before, drawing hearts to Him through the beauty of your faith and the warmth of your life.`,
+
+  n=>`Today we celebrate you, <span class="b-name">${n}</span> — a masterpiece crafted by the Creator's own hand with intention and great love. May His peace that surpasses understanding guard your heart and mind, may His love cast out every fear, and may His plans — which are always good — unfold in your life like a magnificent sunrise this year.`,
+
+  n=>`<span class="b-name">${n}</span>, as you mark another year of life, may your roots in Christ grow ever deeper, your branches spread wide in love and service, and your whole being flourish like a tree planted by streams of living water. May God's word light every path you take and His Spirit fill every room you walk into.`,
+
+  n=>`May this year be the most fruitful yet for you, <span class="b-name">${n}</span>. May God expand your capacity for joy, deepen your capacity for love, increase your capacity for faith, and fill your capacity for His presence until you are so full of Him that every person you meet is touched by the overflow. You are His beloved.`,
+];
+
+const CLOSINGS = [
+  n=>`May every day of this year, ${n}, be a testimony of God's faithfulness. In Jesus' name, Amen. 🙏`,
+  n=>`Walk confidently into this year, ${n} — for He who promised is absolutely faithful. Amen.`,
+  n=>`Happy Birthday, ${n}! May the Lord's face shine upon you all the days of your life.`,
+  n=>`You are loved, ${n} — by family, by friends, and most of all, by the Almighty God. Happy Birthday! 🎂`,
+  n=>`Go forth this year, ${n}, as one who is deeply known and dearly loved by the King of kings. Amen. 🙏`,
+  n=>`May your year be filled with His presence, ${n}, and may you never walk a single step alone. Amen.`,
+  n=>`The Lord has good things in store for you, ${n}. Believe it, receive it, and walk in it this year.`,
+  n=>`Happy Birthday, ${n}! May grace and peace be multiplied to you through the knowledge of God and of Jesus our Lord.`,
+];
+
+/* ════════════════════════════════════════════════════
+   CANDLE COLORS
+   ════════════════════════════════════════════════════ */
+const CANDLE_COLORS = ['#c9a84c','#b86880','#4a7fa5','#5a9070','#a07030','#7060a0','#c06040'];
+
+/* ════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════ */
+let usedVerses = [];
+let plainText = '';
+let personName = '';
+let isDark = false;
+
+/* ════════════════════════════════════════════════════
+   AMBIENT BACKGROUND SETUP
+   ════════════════════════════════════════════════════ */
+(function setupAmbient(){
+  const amb = document.getElementById('ambient');
+  // orbs
+  const orbDefs = [
+    {w:420,h:420,left:'10%',top:'5%',tx:'30px',ty:'40px',d:'8s'},
+    {w:320,h:320,left:'65%',top:'15%',tx:'-25px',ty:'30px',d:'11s'},
+    {w:260,h:260,left:'40%',top:'55%',tx:'20px',ty:'-30px',d:'9s'},
+  ];
+  orbDefs.forEach(o=>{
+    const d=document.createElement('div');
+    d.className='amb-orb';
+    d.style.cssText=`width:${o.w}px;height:${o.h}px;left:${o.left};top:${o.top};--tx:${o.tx};--ty:${o.ty};--d:${o.d};`;
+    amb.appendChild(d);
+  });
+  // cross symbols
+  for(let i=0;i<10;i++){
+    const c=document.createElement('div');
+    c.className='cross-bg';c.textContent='✝';
+    c.style.cssText=`left:${Math.random()*88}%;top:${Math.random()*88}%;--fs:${70+Math.random()*90}px;--r0:${(Math.random()-.5)*18}deg;--r1:${(Math.random()-.5)*18}deg;--d:${5+Math.random()*7}s;`;
+    amb.appendChild(c);
+  }
+})();
+
+/* ════════════════════════════════════════════════════
+   BALLOONS SETUP (decorative, always visible)
+   ════════════════════════════════════════════════════ */
+const BAL_COLORS=[
+  'rgba(201,168,76,0.55)','rgba(184,104,128,0.55)',
+  'rgba(74,127,165,0.55)','rgba(90,144,112,0.55)',
+  'rgba(160,112,48,0.55)','rgba(112,96,160,0.55)',
+];
+function spawnBalloons(){
+  const layer=document.getElementById('balloons');
+  layer.innerHTML='';
+  for(let i=0;i<9;i++){
+    const bc=BAL_COLORS[i%BAL_COLORS.length];
+    const b=document.createElement('div');
+    b.className='bal';
+    b.style.cssText=`left:${4+i*11}%;--dur:${10+Math.random()*8}s;--del:${Math.random()*6}s;--sw:${(Math.random()-.5)*28}px;`;
+    b.innerHTML=`<div class="bal-b" style="--bc:${bc};background:${bc};"></div><div class="bal-s"></div>`;
+    layer.appendChild(b);
+  }
+}
+spawnBalloons();
+
+/* ════════════════════════════════════════════════════
+   CANDLES
+   ════════════════════════════════════════════════════ */
+function buildCandles(){
+  const row=document.getElementById('candles');
+  row.innerHTML='';
+  const n=3+Math.floor(Math.random()*4);
+  for(let i=0;i<n;i++){
+    const c=CANDLE_COLORS[i%CANDLE_COLORS.length];
+    row.innerHTML+=`<div class="candle-w">
+      <div class="flame" style="--fs:${0.55+Math.random()*.6}s"></div>
+      <div class="candle-b" style="--cc:${c};background:${c}"></div>
+      <div class="candle-base"></div>
+    </div>`;
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   GENERATE
+   ════════════════════════════════════════════════════ */
+function generate(){
+  const inp=document.getElementById('nameInput');
+  const name=inp.value.trim();
+  if(!name){
+    inp.classList.remove('shake');
+    void inp.offsetWidth;
+    inp.classList.add('shake');
+    inp.style.borderColor='#c06060';
+    setTimeout(()=>inp.style.borderColor='',1600);
+    return;
+  }
+  personName=name;
+
+  // pick unused verse
+  if(usedVerses.length>=VERSES.length) usedVerses=[];
+  let idx;
+  do{idx=Math.floor(Math.random()*VERSES.length);}
+  while(usedVerses.includes(idx));
+  usedVerses.push(idx);
+  const v=VERSES[idx];
+
+  const blessing=BLESSINGS[Math.floor(Math.random()*BLESSINGS.length)](name);
+  const closing=CLOSINGS[Math.floor(Math.random()*CLOSINGS.length)](name);
+
+  document.getElementById('bTitle').textContent=`🎉 Happy Birthday, ${name}! 🎂`;
+  document.getElementById('bBody').innerHTML=blessing;
+  document.getElementById('vText').innerHTML=`"${v.t}"`;
+  document.getElementById('vRef').textContent=`— ${v.r}`;
+  document.getElementById('bClosing').textContent=closing;
+
+  buildCandles();
+
+  // plain text for copy/share/download
+  plainText=`🎉 Happy Birthday, ${name}! 🎂\n\n`
+    +document.getElementById('bBody').innerText+'\n\n'
+    +`📖 ${v.r}\n"${v.t}"\n\n`
+    +closing;
+
+  // show card
+  const card=document.getElementById('card');
+  card.classList.add('open');
+  card.classList.remove('shown');
+  void card.offsetWidth;
+  requestAnimationFrame(()=>card.classList.add('shown'));
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  launchConfetti();
+  spawnBalloons();
+}
+
+/* ════════════════════════════════════════════════════
+   CONFETTI
+   ════════════════════════════════════════════════════ */
+const canvas=document.getElementById('conf');
+const ctx=canvas.getContext('2d');
+let pieces=[];let raf=null;
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
+
+const CONF_COLORS=['#c9a84c','#e8d5a0','#b86880','#4a7fa5','#5a9070','#f0dfa0','#c06040','#d4af60'];
+const CONF_SHAPES=['rect','circle','cross','diamond'];
+
+function launchConfetti(){
+  pieces=[];
+  for(let i=0;i<200;i++){
+    pieces.push({
+      x:Math.random()*canvas.width,
+      y:-10-Math.random()*200,
+      w:5+Math.random()*11,h:3+Math.random()*5,
+      color:CONF_COLORS[Math.floor(Math.random()*CONF_COLORS.length)],
+      angle:Math.random()*Math.PI*2,
+      spin:(Math.random()-.5)*.13,
+      vx:(Math.random()-.5)*2.8,
+      vy:1.5+Math.random()*3.8,
+      shape:CONF_SHAPES[Math.floor(Math.random()*CONF_SHAPES.length)],
+    });
+  }
+  if(raf)cancelAnimationFrame(raf);
+  animConf();
+}
+function animConf(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  let alive=false;
+  pieces.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=0.055;p.angle+=p.spin;
+    if(p.y<canvas.height){
+      alive=true;
+      const fade=p.y>canvas.height*.75?1-(p.y-canvas.height*.75)/(canvas.height*.25):1;
+      ctx.save();
+      ctx.globalAlpha=Math.max(0,fade);
+      ctx.translate(p.x,p.y);ctx.rotate(p.angle);
+      ctx.fillStyle=p.color;
+      if(p.shape==='circle'){ctx.beginPath();ctx.arc(0,0,p.w/2,0,Math.PI*2);ctx.fill();}
+      else if(p.shape==='cross'){ctx.fillRect(-p.w/2,-p.h/3,p.w,p.h/2);ctx.fillRect(-p.h/3,-p.w/2,p.h/2,p.w);}
+      else if(p.shape==='diamond'){ctx.beginPath();ctx.moveTo(0,-p.w/2);ctx.lineTo(p.w/3,0);ctx.lineTo(0,p.w/2);ctx.lineTo(-p.w/3,0);ctx.closePath();ctx.fill();}
+      else{ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);}
+      ctx.restore();
+    }
+  });
+  if(alive)raf=requestAnimationFrame(animConf);
+  else ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+/* ════════════════════════════════════════════════════
+   THEME TOGGLE
+   ════════════════════════════════════════════════════ */
+function toggleTheme(){
+  isDark=!isDark;
+  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
+  document.getElementById('themeIco').textContent=isDark?'☀️':'🌙';
+  document.getElementById('themeTxt').textContent=isDark?'Light Mode':'Dark Mode';
+}
+
+/* ════════════════════════════════════════════════════
+   TOAST
+   ════════════════════════════════════════════════════ */
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ════════════════════════════════════════════════════
+   ACTIONS
+   ════════════════════════════════════════════════════ */
+function copyCard(){
+  if(!plainText){toast('⚠️ Generate a blessing first!');return;}
+  navigator.clipboard.writeText(plainText).then(()=>toast('✅ Blessing copied to clipboard!'));
+}
+function shareCard(){
+  if(!plainText){toast('⚠️ Generate a blessing first!');return;}
+  if(navigator.share){
+    navigator.share({title:`Happy Birthday ${personName}!`,text:plainText}).catch(()=>{});
+  }else{
+    navigator.clipboard.writeText(plainText).then(()=>toast('📋 Copied — paste to share!'));
+  }
+}
+function downloadCard(){
+  if(!plainText){toast('⚠️ Generate a blessing first!');return;}
+  const content=
+`╔══════════════════════════════════════════╗
+      ✝  Christian Birthday Blessing  ✝
+╚══════════════════════════════════════════╝
+
+${plainText}
+
+══════════════════════════════════════════
+     Sent with love and faith in Christ
+══════════════════════════════════════════`;
+  const blob=new Blob([content],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`birthday-blessing-${personName.replace(/\s+/g,'-').toLowerCase()}.txt`;
+  a.click();URL.revokeObjectURL(a.href);
+  toast('⬇️ Blessing downloaded!');
+}
+</script>
+</body>
+</html>
